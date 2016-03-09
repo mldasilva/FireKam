@@ -31,6 +31,7 @@ namespace MotionDetection
             //        {"Time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
             //        {"MotionCout", motionCount }
             //    };
+            // test1
             await collection.InsertOneAsync(document);
 
             return result;
