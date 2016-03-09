@@ -32,12 +32,16 @@ using System.Timers;
 
 namespace MotionDetection
 {
+
    public partial class FireKAM : MetroForm
    {
       private Capture _capture;
       private MotionHistory _motionHistory;
       private BackgroundSubtractor _forgroundDetector;
       private bool checkTimer;
+
+
+      
 
       public FireKAM()
       {
@@ -52,6 +56,8 @@ namespace MotionDetection
             System.DateTime x = DateTime.Now;
             chart1.Series[0].Points.AddXY(x.ToOADate(),34);
 
+            
+            
             
 
             //try to create the capture
@@ -264,12 +270,6 @@ namespace MotionDetection
             PedestrianPanel.Visible = true;
         }
 
-       
-
-        private void FireKAM_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void ToPDF_Click(object sender, EventArgs e)
         {
@@ -299,5 +299,83 @@ namespace MotionDetection
                 checkTimer = true;
             }
         }
+
+        private void FireKAM_Load(object sender, EventArgs e)
+        {
+
+            for (int i = 0; i < 30; i++)
+            {
+                var P = Controls.Find("panel{i}",true);
+                //P.Name = "";
+                //P.Parent = capturedImageBox;
+               // P.BackColor = Color.Transparent;
+
+            }
+            // dont touch this garabage code
+            
+            /*
+            panel2.Parent = capturedImageBox;
+            panel2.BackColor = Color.Transparent;
+            panel3.Parent = capturedImageBox;
+            panel3.BackColor = Color.Transparent;
+            panel5.Parent = capturedImageBox;
+            panel5.BackColor = Color.Transparent;
+            panel4.Parent = capturedImageBox;
+            panel4.BackColor = Color.Transparent;
+            panel6.Parent = capturedImageBox;
+            panel6.BackColor = Color.Transparent;*/
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            //if (metroPanel1.BorderStyle == BorderStyle.FixedSingle)
+            //{
+            //    int thickness = 3;//it's up to you
+            //    int halfThickness = thickness / 2;
+            //    using (Pen p = new Pen(Color.Black, thickness))
+            //    {
+            //        e.Graphics.DrawRectangle(p, new Rectangle(halfThickness,
+            //                                                  halfThickness,
+            //                                                  metroPanel1.ClientSize.Width - thickness,
+            //                                                  metroPanel1.ClientSize.Height - thickness));
+            //    }
+            //}
+        }
+
+        private void metroToggle1_CheckedChanged(object sender, EventArgs e)
+        {
+            panel1.Visible ^= true;
+            panel2.Visible ^= true;
+            panel3.Visible ^= true;
+            panel4.Visible ^= true;
+            panel5.Visible ^= true;
+            panel6.Visible ^= true;
+            panel7.Visible ^= true;
+            panel8.Visible ^= true;
+            panel9.Visible ^= true;
+            panel10.Visible ^= true;
+            panel11.Visible ^= true;
+            panel12.Visible ^= true;
+            panel13.Visible ^= true;
+            panel14.Visible ^= true;
+            panel15.Visible ^= true;
+            panel16.Visible ^= true;
+            panel17.Visible ^= true;
+            panel18.Visible ^= true;
+            panel19.Visible ^= true;
+            panel20.Visible ^= true;
+            panel21.Visible ^= true;
+            panel22.Visible ^= true;
+            panel23.Visible ^= true;
+            panel24.Visible ^= true;
+            panel25.Visible ^= true;
+            panel26.Visible ^= true;
+            panel27.Visible ^= true;
+            panel28.Visible ^= true;
+            panel29.Visible ^= true;
+            panel30.Visible ^= true;
+        }
+
+        
     }
 }
