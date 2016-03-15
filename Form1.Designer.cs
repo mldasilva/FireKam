@@ -16,9 +16,10 @@ namespace MotionDetection
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FireKAM));
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.dashboardBTN = new MetroFramework.Controls.MetroButton();
@@ -27,13 +28,15 @@ namespace MotionDetection
             this.supportBTN = new MetroFramework.Controls.MetroButton();
             this.msmMain = new MetroFramework.Components.MetroStyleManager(this.components);
             this.Page3 = new MetroFramework.Controls.MetroTabPage();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.ReportTypeCB = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.MotionCountMaxTb = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.TimeMaxTb = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.TimeMinTb = new System.Windows.Forms.TextBox();
             this.MotionCountMinTb = new System.Windows.Forms.TextBox();
             this.CareraTb = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -43,6 +46,15 @@ namespace MotionDetection
             this.ToPDF = new MetroFramework.Controls.MetroButton();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.Page2 = new MetroFramework.Controls.MetroTabPage();
+            this.metroButton7 = new MetroFramework.Controls.MetroButton();
+            this.metroButton8 = new MetroFramework.Controls.MetroButton();
+            this.metroButton9 = new MetroFramework.Controls.MetroButton();
+            this.metroButton4 = new MetroFramework.Controls.MetroButton();
+            this.metroButton5 = new MetroFramework.Controls.MetroButton();
+            this.metroButton6 = new MetroFramework.Controls.MetroButton();
+            this.metroButton3 = new MetroFramework.Controls.MetroButton();
+            this.metroButton2 = new MetroFramework.Controls.MetroButton();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this.MotionPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.motionImageBox = new Emgu.CV.UI.ImageBox();
@@ -56,6 +68,8 @@ namespace MotionDetection
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.msmMain)).BeginInit();
             this.Page3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -69,6 +83,8 @@ namespace MotionDetection
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.metroTabControl1.SuspendLayout();
+            this.metroTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // dashboardBTN
@@ -114,13 +130,15 @@ namespace MotionDetection
             // 
             // Page3
             // 
+            this.Page3.Controls.Add(this.dateTimePicker2);
+            this.Page3.Controls.Add(this.dateTimePicker1);
+            this.Page3.Controls.Add(this.ReportTypeCB);
+            this.Page3.Controls.Add(this.label11);
             this.Page3.Controls.Add(this.label10);
             this.Page3.Controls.Add(this.MotionCountMaxTb);
             this.Page3.Controls.Add(this.label9);
             this.Page3.Controls.Add(this.label8);
-            this.Page3.Controls.Add(this.TimeMaxTb);
             this.Page3.Controls.Add(this.label7);
-            this.Page3.Controls.Add(this.TimeMinTb);
             this.Page3.Controls.Add(this.MotionCountMinTb);
             this.Page3.Controls.Add(this.CareraTb);
             this.Page3.Controls.Add(this.label6);
@@ -140,10 +158,54 @@ namespace MotionDetection
             this.Page3.VerticalScrollbarBarColor = true;
             this.Page3.VerticalScrollbarSize = 20;
             // 
+            // dateTimePicker2
+            // 
+            this.dateTimePicker2.CustomFormat = "MM/yyyy";
+            this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker2.Location = new System.Drawing.Point(448, 275);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.ShowUpDown = true;
+            this.dateTimePicker2.Size = new System.Drawing.Size(200, 31);
+            this.dateTimePicker2.TabIndex = 35;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.CustomFormat = "MM/yyyy";
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(220, 275);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.ShowUpDown = true;
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 31);
+            this.dateTimePicker1.TabIndex = 34;
+            // 
+            // ReportTypeCB
+            // 
+            this.ReportTypeCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ReportTypeCB.FormattingEnabled = true;
+            this.ReportTypeCB.Items.AddRange(new object[] {
+            "Hourly Report",
+            "Daily Reprot",
+            "Monthly Report",
+            "Yearly Reropt"});
+            this.ReportTypeCB.Location = new System.Drawing.Point(220, 162);
+            this.ReportTypeCB.Name = "ReportTypeCB";
+            this.ReportTypeCB.Size = new System.Drawing.Size(243, 33);
+            this.ReportTypeCB.TabIndex = 33;
+            this.ReportTypeCB.SelectedIndexChanged += new System.EventHandler(this.ReportTypeCB_SelectedIndexChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(39, 162);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(130, 25);
+            this.label11.TabIndex = 32;
+            this.label11.Text = "Report Type";
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(389, 238);
+            this.label10.Location = new System.Drawing.Point(389, 332);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(53, 25);
             this.label10.TabIndex = 30;
@@ -151,7 +213,7 @@ namespace MotionDetection
             // 
             // MotionCountMaxTb
             // 
-            this.MotionCountMaxTb.Location = new System.Drawing.Point(363, 266);
+            this.MotionCountMaxTb.Location = new System.Drawing.Point(363, 360);
             this.MotionCountMaxTb.Name = "MotionCountMaxTb";
             this.MotionCountMaxTb.Size = new System.Drawing.Size(100, 31);
             this.MotionCountMaxTb.TabIndex = 29;
@@ -159,7 +221,7 @@ namespace MotionDetection
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(246, 241);
+            this.label9.Location = new System.Drawing.Point(246, 335);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(47, 25);
             this.label9.TabIndex = 28;
@@ -168,38 +230,24 @@ namespace MotionDetection
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(389, 147);
+            this.label8.Location = new System.Drawing.Point(524, 247);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(53, 25);
+            this.label8.Size = new System.Drawing.Size(50, 25);
             this.label8.TabIndex = 27;
-            this.label8.Text = "Max";
-            // 
-            // TimeMaxTb
-            // 
-            this.TimeMaxTb.Location = new System.Drawing.Point(363, 175);
-            this.TimeMaxTb.Name = "TimeMaxTb";
-            this.TimeMaxTb.Size = new System.Drawing.Size(100, 31);
-            this.TimeMaxTb.TabIndex = 26;
+            this.label8.Text = "End";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(246, 147);
+            this.label7.Location = new System.Drawing.Point(231, 247);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(47, 25);
+            this.label7.Size = new System.Drawing.Size(187, 25);
             this.label7.TabIndex = 25;
-            this.label7.Text = "Min";
-            // 
-            // TimeMinTb
-            // 
-            this.TimeMinTb.Location = new System.Drawing.Point(220, 175);
-            this.TimeMinTb.Name = "TimeMinTb";
-            this.TimeMinTb.Size = new System.Drawing.Size(100, 31);
-            this.TimeMinTb.TabIndex = 24;
+            this.label7.Text = "Start(dd-mm-yyyy)";
             // 
             // MotionCountMinTb
             // 
-            this.MotionCountMinTb.Location = new System.Drawing.Point(220, 269);
+            this.MotionCountMinTb.Location = new System.Drawing.Point(220, 363);
             this.MotionCountMinTb.Name = "MotionCountMinTb";
             this.MotionCountMinTb.Size = new System.Drawing.Size(100, 31);
             this.MotionCountMinTb.TabIndex = 23;
@@ -214,7 +262,7 @@ namespace MotionDetection
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(29, 272);
+            this.label6.Location = new System.Drawing.Point(29, 366);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(140, 25);
             this.label6.TabIndex = 21;
@@ -223,7 +271,7 @@ namespace MotionDetection
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(110, 181);
+            this.label5.Location = new System.Drawing.Point(110, 275);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 25);
             this.label5.TabIndex = 20;
@@ -240,16 +288,17 @@ namespace MotionDetection
             // 
             // GenerateChartBtn
             // 
-            this.GenerateChartBtn.Location = new System.Drawing.Point(150, 418);
+            this.GenerateChartBtn.Location = new System.Drawing.Point(150, 458);
             this.GenerateChartBtn.Margin = new System.Windows.Forms.Padding(6);
             this.GenerateChartBtn.Name = "GenerateChartBtn";
             this.GenerateChartBtn.Size = new System.Drawing.Size(170, 63);
             this.GenerateChartBtn.TabIndex = 18;
             this.GenerateChartBtn.Text = "Generate";
+            this.GenerateChartBtn.Click += new System.EventHandler(this.GenerateChartBtn_Click);
             // 
             // ToPDF
             // 
-            this.ToPDF.Location = new System.Drawing.Point(1610, 790);
+            this.ToPDF.Location = new System.Drawing.Point(1610, 914);
             this.ToPDF.Margin = new System.Windows.Forms.Padding(6);
             this.ToPDF.Name = "ToPDF";
             this.ToPDF.Size = new System.Drawing.Size(170, 63);
@@ -259,23 +308,51 @@ namespace MotionDetection
             // 
             // chart1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(596, 21);
+            chartArea2.AxisX.Interval = 1D;
+            chartArea2.AxisX.MajorGrid.LineWidth = 0;
+            chartArea2.AxisX.Minimum = 0D;
+            chartArea2.AxisX.ScrollBar.BackColor = System.Drawing.Color.White;
+            chartArea2.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.White;
+            chartArea2.AxisX.ScrollBar.LineColor = System.Drawing.Color.White;
+            chartArea2.AxisY.MajorGrid.LineWidth = 0;
+            chartArea2.CursorX.Interval = 0.01D;
+            chartArea2.CursorX.IsUserEnabled = true;
+            chartArea2.CursorX.IsUserSelectionEnabled = true;
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
+            this.chart1.Location = new System.Drawing.Point(844, 21);
             this.chart1.Margin = new System.Windows.Forms.Padding(6);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Camera";
-            this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(1202, 577);
+            series3.ChartArea = "ChartArea1";
+            series3.IsValueShownAsLabel = true;
+            series3.IsVisibleInLegend = false;
+            series3.Legend = "Legend1";
+            series3.Name = "Camera";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.Red;
+            series4.IsVisibleInLegend = false;
+            series4.Legend = "Legend1";
+            series4.Name = "Series2";
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
+            this.chart1.Size = new System.Drawing.Size(954, 861);
             this.chart1.TabIndex = 11;
             this.chart1.Text = "chart1";
             // 
             // Page2
             // 
+            this.Page2.Controls.Add(this.metroButton7);
+            this.Page2.Controls.Add(this.metroButton8);
+            this.Page2.Controls.Add(this.metroButton9);
+            this.Page2.Controls.Add(this.metroButton4);
+            this.Page2.Controls.Add(this.metroButton5);
+            this.Page2.Controls.Add(this.metroButton6);
+            this.Page2.Controls.Add(this.metroButton3);
+            this.Page2.Controls.Add(this.metroButton2);
+            this.Page2.Controls.Add(this.metroButton1);
             this.Page2.Controls.Add(this.MotionPanel);
             this.Page2.HorizontalScrollbarBarColor = true;
             this.Page2.HorizontalScrollbarSize = 19;
@@ -288,11 +365,93 @@ namespace MotionDetection
             this.Page2.VerticalScrollbarBarColor = true;
             this.Page2.VerticalScrollbarSize = 20;
             // 
+            // metroButton7
+            // 
+            this.metroButton7.Location = new System.Drawing.Point(285, 490);
+            this.metroButton7.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton7.Name = "metroButton7";
+            this.metroButton7.Size = new System.Drawing.Size(96, 97);
+            this.metroButton7.TabIndex = 24;
+            this.metroButton7.Text = "9";
+            // 
+            // metroButton8
+            // 
+            this.metroButton8.Location = new System.Drawing.Point(177, 490);
+            this.metroButton8.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton8.Name = "metroButton8";
+            this.metroButton8.Size = new System.Drawing.Size(96, 97);
+            this.metroButton8.TabIndex = 23;
+            this.metroButton8.Text = "8";
+            // 
+            // metroButton9
+            // 
+            this.metroButton9.Location = new System.Drawing.Point(69, 490);
+            this.metroButton9.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton9.Name = "metroButton9";
+            this.metroButton9.Size = new System.Drawing.Size(96, 97);
+            this.metroButton9.TabIndex = 22;
+            this.metroButton9.Text = "7";
+            // 
+            // metroButton4
+            // 
+            this.metroButton4.Location = new System.Drawing.Point(285, 381);
+            this.metroButton4.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton4.Name = "metroButton4";
+            this.metroButton4.Size = new System.Drawing.Size(96, 97);
+            this.metroButton4.TabIndex = 21;
+            this.metroButton4.Text = "6";
+            // 
+            // metroButton5
+            // 
+            this.metroButton5.Location = new System.Drawing.Point(177, 381);
+            this.metroButton5.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton5.Name = "metroButton5";
+            this.metroButton5.Size = new System.Drawing.Size(96, 97);
+            this.metroButton5.TabIndex = 20;
+            this.metroButton5.Text = "5";
+            // 
+            // metroButton6
+            // 
+            this.metroButton6.Location = new System.Drawing.Point(69, 381);
+            this.metroButton6.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton6.Name = "metroButton6";
+            this.metroButton6.Size = new System.Drawing.Size(96, 97);
+            this.metroButton6.TabIndex = 19;
+            this.metroButton6.Text = "4";
+            // 
+            // metroButton3
+            // 
+            this.metroButton3.Location = new System.Drawing.Point(285, 272);
+            this.metroButton3.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton3.Name = "metroButton3";
+            this.metroButton3.Size = new System.Drawing.Size(96, 97);
+            this.metroButton3.TabIndex = 18;
+            this.metroButton3.Text = "3";
+            // 
+            // metroButton2
+            // 
+            this.metroButton2.Location = new System.Drawing.Point(177, 272);
+            this.metroButton2.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton2.Name = "metroButton2";
+            this.metroButton2.Size = new System.Drawing.Size(96, 97);
+            this.metroButton2.TabIndex = 17;
+            this.metroButton2.Text = "2";
+            // 
+            // metroButton1
+            // 
+            this.metroButton1.Location = new System.Drawing.Point(69, 272);
+            this.metroButton1.Margin = new System.Windows.Forms.Padding(6);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(96, 97);
+            this.metroButton1.TabIndex = 16;
+            this.metroButton1.Text = "1";
+            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
+            // 
             // MotionPanel
             // 
             this.MotionPanel.Controls.Add(this.label1);
             this.MotionPanel.Controls.Add(this.motionImageBox);
-            this.MotionPanel.Location = new System.Drawing.Point(112, 50);
+            this.MotionPanel.Location = new System.Drawing.Point(444, 32);
             this.MotionPanel.Margin = new System.Windows.Forms.Padding(4);
             this.MotionPanel.Name = "MotionPanel";
             this.MotionPanel.Size = new System.Drawing.Size(1382, 1013);
@@ -310,6 +469,7 @@ namespace MotionDetection
             // 
             // motionImageBox
             // 
+            this.motionImageBox.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
             this.motionImageBox.Location = new System.Drawing.Point(6, 62);
             this.motionImageBox.Margin = new System.Windows.Forms.Padding(6);
             this.motionImageBox.Name = "motionImageBox";
@@ -335,10 +495,10 @@ namespace MotionDetection
             // 
             this.PedestrianPanel.Controls.Add(this.label4);
             this.PedestrianPanel.Controls.Add(this.capturedImageBox);
-            this.PedestrianPanel.Location = new System.Drawing.Point(70, 50);
+            this.PedestrianPanel.Location = new System.Drawing.Point(64, 50);
             this.PedestrianPanel.Margin = new System.Windows.Forms.Padding(4);
             this.PedestrianPanel.Name = "PedestrianPanel";
-            this.PedestrianPanel.Size = new System.Drawing.Size(1424, 1013);
+            this.PedestrianPanel.Size = new System.Drawing.Size(1430, 1013);
             this.PedestrianPanel.TabIndex = 7;
             // 
             // label4
@@ -354,10 +514,10 @@ namespace MotionDetection
             // capturedImageBox
             // 
             this.capturedImageBox.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.PanAndZoom;
-            this.capturedImageBox.Location = new System.Drawing.Point(24, 50);
+            this.capturedImageBox.Location = new System.Drawing.Point(6, 50);
             this.capturedImageBox.Margin = new System.Windows.Forms.Padding(6);
             this.capturedImageBox.Name = "capturedImageBox";
-            this.capturedImageBox.Size = new System.Drawing.Size(1384, 936);
+            this.capturedImageBox.Size = new System.Drawing.Size(1418, 957);
             this.capturedImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.capturedImageBox.TabIndex = 0;
             this.capturedImageBox.TabStop = false;
@@ -410,13 +570,14 @@ namespace MotionDetection
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.Home);
-            this.metroTabControl1.Controls.Add(this.Page2);
             this.metroTabControl1.Controls.Add(this.Page3);
+            this.metroTabControl1.Controls.Add(this.Page2);
             this.metroTabControl1.Controls.Add(this.Page1);
+            this.metroTabControl1.Controls.Add(this.metroTabPage1);
             this.metroTabControl1.Location = new System.Drawing.Point(432, 58);
             this.metroTabControl1.Margin = new System.Windows.Forms.Padding(6);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 2;
+            this.metroTabControl1.SelectedIndex = 4;
             this.metroTabControl1.Size = new System.Drawing.Size(1846, 1172);
             this.metroTabControl1.TabIndex = 11;
             // 
@@ -424,6 +585,26 @@ namespace MotionDetection
             // 
             this.timer.Interval = 5000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
+            // metroTabPage1
+            // 
+            this.metroTabPage1.Controls.Add(this.pictureBox3);
+            this.metroTabPage1.HorizontalScrollbarBarColor = true;
+            this.metroTabPage1.Location = new System.Drawing.Point(8, 42);
+            this.metroTabPage1.Name = "metroTabPage1";
+            this.metroTabPage1.Size = new System.Drawing.Size(1830, 1122);
+            this.metroTabPage1.TabIndex = 4;
+            this.metroTabPage1.Text = "metroTabPage1";
+            this.metroTabPage1.VerticalScrollbarBarColor = true;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox3.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(1830, 1122);
+            this.pictureBox3.TabIndex = 26;
+            this.pictureBox3.TabStop = false;
             // 
             // FireKAM
             // 
@@ -462,6 +643,8 @@ namespace MotionDetection
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.metroTabControl1.ResumeLayout(false);
+            this.metroTabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -496,15 +679,28 @@ namespace MotionDetection
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox TimeMaxTb;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox TimeMinTb;
         private System.Windows.Forms.TextBox MotionCountMinTb;
         private System.Windows.Forms.TextBox CareraTb;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox MotionCountMaxTb;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ComboBox ReportTypeCB;
+        private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private MetroFramework.Controls.MetroButton metroButton7;
+        private MetroFramework.Controls.MetroButton metroButton8;
+        private MetroFramework.Controls.MetroButton metroButton9;
+        private MetroFramework.Controls.MetroButton metroButton4;
+        private MetroFramework.Controls.MetroButton metroButton5;
+        private MetroFramework.Controls.MetroButton metroButton6;
+        private MetroFramework.Controls.MetroButton metroButton3;
+        private MetroFramework.Controls.MetroButton metroButton2;
+        private MetroFramework.Controls.MetroButton metroButton1;
+        private MetroFramework.Controls.MetroTabPage metroTabPage1;
+        private System.Windows.Forms.PictureBox pictureBox3;
     }
 }
 

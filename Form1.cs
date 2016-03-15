@@ -5,11 +5,7 @@
 // Install-Package MetroFramework
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -18,7 +14,6 @@ using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 using System.Diagnostics;
-using ZedGraph;
 using Emgu.CV.GPU;
 
 using System.IO;
@@ -34,39 +29,37 @@ namespace MotionDetection
 {
    public partial class FireKAM : MetroForm
    {
-      private Capture _capture;
-      private MotionHistory _motionHistory;
-      private BackgroundSubtractor _forgroundDetector;
-      private bool checkTimer;
+        private Capture _capture;
+        private MotionHistory _motionHistory;
+        private BackgroundSubtractor _forgroundDetector;
+        private bool checkTimer;
+        Heatmap pHeatmap;
 
-      public FireKAM()
-      {
+
+        public FireKAM()
+        {
             InitializeComponent();
             checkTimer = true;
             timer.Start();
             this.StyleManager = msmMain;
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 200);
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 33);
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 33);
-            chart1.Series["Camera"].XValueType = ChartValueType.DateTime;
-            System.DateTime x = DateTime.Now;
-            chart1.Series[0].Points.AddXY(x.ToOADate(),34);
-
-            
+            ReportTypeCB.SelectedIndex = 0;
+            chart1.Series["Camera"].XValueType = ChartValueType.Auto;
+            chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            pHeatmap = new Heatmap();
 
             //try to create the capture
             if (_capture == null)
-         {
-            try
             {
-                //"..\\..\\videoplayback480p.mp4"
-                _capture = new Capture("..\\..\\videoplayback480p.mp4");
-            }
-            catch (NullReferenceException excpt)
-            {   //show errors if there is any
-               MessageBox.Show(excpt.Message);
-            }
-         }
+                try
+                {
+                    //"..\\..\\videoplayback480p.mp4"
+                    _capture = new Capture("..\\..\\videoplayback480p.mp4");
+                }
+                catch (NullReferenceException excpt)
+                {   //show errors if there is any
+                    MessageBox.Show(excpt.Message);
+                }
+                }
 
          if (_capture != null) //if camera capture has been successfully created
          {
@@ -80,10 +73,12 @@ namespace MotionDetection
          }
       }
 
-      private Mat _segMask = new Mat();
-      private Mat _forgroundMask = new Mat();
-      private async void ProcessFrame(object sender, EventArgs e)
-      {
+        private Mat _segMask = new Mat();
+        private Mat _forgroundMask = new Mat();
+        Heatmap myHeatMap = new Heatmap();
+
+        private async void ProcessFrame(object sender, EventArgs e)
+        {
             Mat image = new Mat();
 
             _capture.Retrieve(image);
@@ -127,10 +122,13 @@ namespace MotionDetection
             int motionCount = 0;
             //iterate through each of the motion component
             foreach (System.Drawing.Rectangle comp in rects)
-            {
+            {              
                 int area = comp.Width * comp.Height;
                 //reject the components that have small area;
                 if (area < minArea) continue;
+
+                //create heatmap
+                myHeatMap.heatPoints.Add(new HeatPoint(comp.X, comp.Y, 32));
 
                 // find the angle and motion pixel count of the specific area
                 double angle, motionPixelCount;
@@ -143,6 +141,12 @@ namespace MotionDetection
                 DrawMotion(motionImage, comp, angle, new Bgr(Color.Red));
                 motionCount++;
             }
+
+            //pictureBox3.BackgroundImage = myHeatMap.CreateHeatmap();
+            Bitmap b = (Bitmap)myHeatMap.CreateHeatmap();
+            //Image<Gray, Byte> normalizedMasterImage = new Image<Gray, Byte>(b);
+            //motionImage = normalizedMasterImage.Mat;
+            pictureBox3.BackgroundImage = b;
 
             // find and draw the overall motion angle
             double overallAngle, overallMotionPixelCount;
@@ -182,9 +186,6 @@ namespace MotionDetection
                 };
                 await DataAccess.Insert(document);
             }
-
-            //test string
-            //string a = await DataAccess.FindByTime("2016-02-22 03:00:00", "2016-02-28 02:00:00");
 
             motionCount = 0;
             //Display the image of the motion
@@ -298,6 +299,166 @@ namespace MotionDetection
             {
                 checkTimer = true;
             }
+        }
+
+        private async void GenerateChartBtn_Click(object sender, EventArgs e)
+        {
+            foreach (var series in chart1.Series)
+            {
+                series.Points.Clear();
+            }
+            //DateTime min = new DateTime(2016, 03, 08);
+            //DateTime max = new DateTime(2016, 12, 31);
+            DateTime min = dateTimePicker1.Value.Date;
+            DateTime max = dateTimePicker2.Value.Date;
+            //yearly report
+            if (ReportTypeCB.SelectedIndex == 3)
+            {             
+                for (int i = 0; i < (max.Year - min.Year) + 1; i++)
+                {
+                    DateTime firstDayOfYear = new DateTime(min.Year, 1, 1);
+                    string result = await DataAccess.FindByTime(GetDateTimeString(firstDayOfYear.AddYears(i)), GetDateTimeString(min.AddYears(i + 1).AddMilliseconds(-1)));
+                    if (result != "no result")
+                    {
+                        chart1.Series[0].Points.AddXY(i + 1, int.Parse(result));
+                        chart1.Series[1].Points.AddXY(i + 1, int.Parse(result));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(i + 1, 0);
+                        chart1.Series[1].Points.AddXY(i + 1, 0);
+                    }
+                }
+            }
+            //monthly report
+            else if(ReportTypeCB.SelectedIndex == 2)
+            {              
+                for(int i = 0; i < 12; i++)
+                {
+                    //-1 millisecond to get the last second of the year
+                    DateTime firstDayOfYear = new DateTime(min.Year, 1, 1);
+                    string result = await DataAccess.FindByTime(GetDateTimeString(firstDayOfYear.AddMonths(i)), GetDateTimeString(min.AddMonths(i+1).AddMilliseconds(-1)));
+                    if (result != "no result")
+                    {
+                        chart1.Series[0].Points.AddXY(i + 1, int.Parse(result));
+                        chart1.Series[1].Points.AddXY(i + 1, int.Parse(result));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(i + 1, 0);
+                        chart1.Series[1].Points.AddXY(i + 1, 0);
+                    }
+                }               
+            }
+            //daily report
+            else if (ReportTypeCB.SelectedIndex == 1)
+            {
+                for (int i = 0; i < (max-min).TotalDays; i++)
+                {
+                    string result = await DataAccess.FindByTime(GetDateTimeString(min.AddDays(i)), GetDateTimeString(min.AddDays(i + 1)));
+                    if (result != "no result")
+                    {
+                        chart1.Series[0].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), int.Parse(result));
+                        chart1.Series[1].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), int.Parse(result));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), 0);
+                        chart1.Series[1].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), 0);
+                    }
+                } 
+            }
+            //hourly report
+            else if (ReportTypeCB.SelectedIndex == 0)
+            {
+                //db.record.find({ "Time":{$gt: "2016-03-08 00:00:00", $lt: "2016-03-08 01:00:00"} })
+                //db.record.insert({ "Camera":"Camera1","Time":"2016-03-08 09:12:12","MotionCout":1234})
+                for (int i = 0; i < 24; i++)
+                {
+                    string result = await DataAccess.FindByTime(GetDateTimeString(min.AddHours(i)), GetDateTimeString(min.AddHours(i + 1)));
+                    if (result != "no result")
+                    {
+                        chart1.Series[0].Points.AddXY(i, int.Parse(result));
+                        chart1.Series[1].Points.AddXY(i, int.Parse(result));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(i, 0);
+                        chart1.Series[1].Points.AddXY(i, 0);
+                    }
+                }
+            }
+        }
+              
+        //convert datetime to 0000-00-00 format
+        private string GetDateTimeString(DateTime date)
+        {
+            string result;
+            result = date.Year + "-" + date.Month.ToString("00") + "-" + date.Day.ToString("00") + " " + date.Hour.ToString("00") + ":" + date.Minute.ToString("00") + ":" + date.Second.ToString("00");
+            return result;
+        }
+
+        private void ReportTypeCB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(ReportTypeCB.SelectedIndex == 0)
+            {
+                label8.Visible = false;
+                dateTimePicker2.Visible = false;
+                dateTimePicker1.CustomFormat = "dd-MM-yyyy";
+            }
+            else if(ReportTypeCB.SelectedIndex == 1)
+            {
+                label8.Visible = true;
+                dateTimePicker2.Visible = true;
+                dateTimePicker1.CustomFormat = "dd-MM-yyyy";
+                dateTimePicker2.CustomFormat = "dd-MM-yyyy";
+            }
+            else if(ReportTypeCB.SelectedIndex == 2)
+            {
+                label8.Visible = false;
+                dateTimePicker2.Visible = false;
+                dateTimePicker1.CustomFormat = "yyyy";
+            }
+            else if(ReportTypeCB.SelectedIndex == 3)
+            {
+                label8.Visible = true;
+                dateTimePicker2.Visible = true;
+                dateTimePicker1.CustomFormat = "yyyy";
+            }
+        }
+
+        public Bitmap[] splitBitmap()
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            System.Drawing.Bitmap original;
+            System.Drawing.Bitmap temp;
+            if (openDialog.ShowDialog() == DialogResult.OK)
+            {
+                original = new Bitmap(openDialog.FileName);
+            }
+            else
+            {
+                original = new Bitmap("FireKamlogo2.ico");
+            }
+            System.Drawing.Rectangle image1Rect = new System.Drawing.Rectangle(0,0, original.Width/3,original.Height/3);
+            System.Drawing.Rectangle image2Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image3Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image4Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image5Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image6Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image7Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image8Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image9Rect = new System.Drawing.Rectangle();
+
+            Bitmap[] imgs = new Bitmap[9];
+            imgs[0] = original.Clone(image1Rect, original.PixelFormat);
+            //assign imgs[0] to buttom background
+            return imgs;
+        }
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            splitBitmap();
         }
     }
 }
