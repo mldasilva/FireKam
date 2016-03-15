@@ -16,9 +16,9 @@ namespace MotionDetection
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FireKAM));
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.dashboardBTN = new MetroFramework.Controls.MetroButton();
@@ -47,8 +47,8 @@ namespace MotionDetection
             this.label1 = new System.Windows.Forms.Label();
             this.motionImageBox = new Emgu.CV.UI.ImageBox();
             this.Page1 = new MetroFramework.Controls.MetroTabPage();
+            this.metroToggle1 = new MetroFramework.Controls.MetroToggle();
             this.PedestrianPanel = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.capturedImageBox = new Emgu.CV.UI.ImageBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -57,36 +57,13 @@ namespace MotionDetection
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.panel12 = new System.Windows.Forms.Panel();
-            this.panel11 = new System.Windows.Forms.Panel();
-            this.panel10 = new System.Windows.Forms.Panel();
-            this.panel9 = new System.Windows.Forms.Panel();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.panel14 = new System.Windows.Forms.Panel();
-            this.panel18 = new System.Windows.Forms.Panel();
-            this.panel17 = new System.Windows.Forms.Panel();
-            this.panel16 = new System.Windows.Forms.Panel();
-            this.panel15 = new System.Windows.Forms.Panel();
-            this.panel13 = new System.Windows.Forms.Panel();
-            this.panel20 = new System.Windows.Forms.Panel();
-            this.panel24 = new System.Windows.Forms.Panel();
-            this.panel23 = new System.Windows.Forms.Panel();
-            this.panel22 = new System.Windows.Forms.Panel();
-            this.panel21 = new System.Windows.Forms.Panel();
-            this.panel19 = new System.Windows.Forms.Panel();
-            this.panel26 = new System.Windows.Forms.Panel();
-            this.panel30 = new System.Windows.Forms.Panel();
-            this.panel29 = new System.Windows.Forms.Panel();
-            this.panel28 = new System.Windows.Forms.Panel();
-            this.panel27 = new System.Windows.Forms.Panel();
-            this.panel25 = new System.Windows.Forms.Panel();
-            this.metroToggle1 = new MetroFramework.Controls.MetroToggle();
+            this.metroComboBox1 = new MetroFramework.Controls.MetroComboBox();
+            this.metroComboBox2 = new MetroFramework.Controls.MetroComboBox();
+            this.gridLabel = new MetroFramework.Controls.MetroLabel();
+            this.colorLabel = new MetroFramework.Controls.MetroLabel();
+            this.opacityLabel = new MetroFramework.Controls.MetroLabel();
+            this.metroComboBox3 = new MetroFramework.Controls.MetroComboBox();
+            this.panelLabel = new MetroFramework.Controls.MetroLabel();
             ((System.ComponentModel.ISupportInitialize)(this.msmMain)).BeginInit();
             this.Page3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -293,16 +270,16 @@ namespace MotionDetection
             // 
             // chart1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
             this.chart1.Location = new System.Drawing.Point(298, 11);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Camera";
-            this.chart1.Series.Add(series1);
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Camera";
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(601, 300);
             this.chart1.TabIndex = 11;
             this.chart1.Text = "chart1";
@@ -322,10 +299,10 @@ namespace MotionDetection
             // 
             this.MotionPanel.Controls.Add(this.label1);
             this.MotionPanel.Controls.Add(this.motionImageBox);
-            this.MotionPanel.Location = new System.Drawing.Point(56, 26);
+            this.MotionPanel.Location = new System.Drawing.Point(35, 26);
             this.MotionPanel.Margin = new System.Windows.Forms.Padding(2);
             this.MotionPanel.Name = "MotionPanel";
-            this.MotionPanel.Size = new System.Drawing.Size(691, 527);
+            this.MotionPanel.Size = new System.Drawing.Size(712, 527);
             this.MotionPanel.TabIndex = 8;
             // 
             // label1
@@ -340,14 +317,21 @@ namespace MotionDetection
             // 
             // motionImageBox
             // 
-            this.motionImageBox.Location = new System.Drawing.Point(3, 32);
+            this.motionImageBox.Location = new System.Drawing.Point(12, 26);
             this.motionImageBox.Name = "motionImageBox";
-            this.motionImageBox.Size = new System.Drawing.Size(685, 491);
+            this.motionImageBox.Size = new System.Drawing.Size(690, 487);
             this.motionImageBox.TabIndex = 2;
             this.motionImageBox.TabStop = false;
             // 
             // Page1
             // 
+            this.Page1.Controls.Add(this.panelLabel);
+            this.Page1.Controls.Add(this.metroComboBox3);
+            this.Page1.Controls.Add(this.opacityLabel);
+            this.Page1.Controls.Add(this.colorLabel);
+            this.Page1.Controls.Add(this.gridLabel);
+            this.Page1.Controls.Add(this.metroComboBox2);
+            this.Page1.Controls.Add(this.metroComboBox1);
             this.Page1.Controls.Add(this.metroToggle1);
             this.Page1.Controls.Add(this.PedestrianPanel);
             this.Page1.HorizontalScrollbarBarColor = true;
@@ -358,38 +342,19 @@ namespace MotionDetection
             this.Page1.Text = "Pedestrian View";
             this.Page1.VerticalScrollbarBarColor = true;
             // 
+            // metroToggle1
+            // 
+            this.metroToggle1.AutoSize = true;
+            this.metroToggle1.Location = new System.Drawing.Point(832, 52);
+            this.metroToggle1.Name = "metroToggle1";
+            this.metroToggle1.Size = new System.Drawing.Size(80, 17);
+            this.metroToggle1.TabIndex = 8;
+            this.metroToggle1.Text = "Off";
+            this.metroToggle1.UseVisualStyleBackColor = true;
+            this.metroToggle1.CheckedChanged += new System.EventHandler(this.metroToggle1_CheckedChanged);
+            // 
             // PedestrianPanel
             // 
-            this.PedestrianPanel.Controls.Add(this.panel26);
-            this.PedestrianPanel.Controls.Add(this.panel30);
-            this.PedestrianPanel.Controls.Add(this.panel29);
-            this.PedestrianPanel.Controls.Add(this.panel28);
-            this.PedestrianPanel.Controls.Add(this.panel27);
-            this.PedestrianPanel.Controls.Add(this.panel25);
-            this.PedestrianPanel.Controls.Add(this.panel20);
-            this.PedestrianPanel.Controls.Add(this.panel24);
-            this.PedestrianPanel.Controls.Add(this.panel23);
-            this.PedestrianPanel.Controls.Add(this.panel22);
-            this.PedestrianPanel.Controls.Add(this.panel21);
-            this.PedestrianPanel.Controls.Add(this.panel19);
-            this.PedestrianPanel.Controls.Add(this.panel14);
-            this.PedestrianPanel.Controls.Add(this.panel18);
-            this.PedestrianPanel.Controls.Add(this.panel17);
-            this.PedestrianPanel.Controls.Add(this.panel16);
-            this.PedestrianPanel.Controls.Add(this.panel15);
-            this.PedestrianPanel.Controls.Add(this.panel13);
-            this.PedestrianPanel.Controls.Add(this.panel8);
-            this.PedestrianPanel.Controls.Add(this.panel2);
-            this.PedestrianPanel.Controls.Add(this.panel12);
-            this.PedestrianPanel.Controls.Add(this.panel6);
-            this.PedestrianPanel.Controls.Add(this.panel11);
-            this.PedestrianPanel.Controls.Add(this.panel5);
-            this.PedestrianPanel.Controls.Add(this.panel10);
-            this.PedestrianPanel.Controls.Add(this.panel4);
-            this.PedestrianPanel.Controls.Add(this.panel9);
-            this.PedestrianPanel.Controls.Add(this.panel3);
-            this.PedestrianPanel.Controls.Add(this.panel7);
-            this.PedestrianPanel.Controls.Add(this.panel1);
             this.PedestrianPanel.Controls.Add(this.label4);
             this.PedestrianPanel.Controls.Add(this.capturedImageBox);
             this.PedestrianPanel.Location = new System.Drawing.Point(35, 26);
@@ -397,14 +362,6 @@ namespace MotionDetection
             this.PedestrianPanel.Name = "PedestrianPanel";
             this.PedestrianPanel.Size = new System.Drawing.Size(712, 527);
             this.PedestrianPanel.TabIndex = 7;
-            // 
-            // panel1
-            // 
-            this.panel1.Location = new System.Drawing.Point(12, 26);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(115, 100);
-            this.panel1.TabIndex = 5;
-            this.panel1.Visible = false;
             // 
             // label4
             // 
@@ -418,7 +375,7 @@ namespace MotionDetection
             // 
             // capturedImageBox
             // 
-            this.capturedImageBox.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.PanAndZoom;
+            this.capturedImageBox.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
             this.capturedImageBox.Location = new System.Drawing.Point(12, 26);
             this.capturedImageBox.Name = "capturedImageBox";
             this.capturedImageBox.Size = new System.Drawing.Size(690, 487);
@@ -468,8 +425,8 @@ namespace MotionDetection
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.Home);
-            this.metroTabControl1.Controls.Add(this.Page2);
             this.metroTabControl1.Controls.Add(this.Page1);
+            this.metroTabControl1.Controls.Add(this.Page2);
             this.metroTabControl1.Controls.Add(this.Page3);
             this.metroTabControl1.Location = new System.Drawing.Point(216, 30);
             this.metroTabControl1.Name = "metroTabControl1";
@@ -482,248 +439,68 @@ namespace MotionDetection
             this.timer.Interval = 5000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
-            // panel2
+            // metroComboBox1
             // 
-            this.panel2.Location = new System.Drawing.Point(127, 26);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(115, 100);
-            this.panel2.TabIndex = 6;
-            this.panel2.Visible = false;
+            this.metroComboBox1.FormattingEnabled = true;
+            this.metroComboBox1.ItemHeight = 23;
+            this.metroComboBox1.Location = new System.Drawing.Point(832, 107);
+            this.metroComboBox1.Name = "metroComboBox1";
+            this.metroComboBox1.Size = new System.Drawing.Size(80, 29);
+            this.metroComboBox1.TabIndex = 9;
             // 
-            // panel3
+            // metroComboBox2
             // 
-            this.panel3.Location = new System.Drawing.Point(242, 26);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(115, 100);
-            this.panel3.TabIndex = 6;
-            this.panel3.Visible = false;
+            this.metroComboBox2.FormattingEnabled = true;
+            this.metroComboBox2.ItemHeight = 23;
+            this.metroComboBox2.Location = new System.Drawing.Point(832, 179);
+            this.metroComboBox2.Name = "metroComboBox2";
+            this.metroComboBox2.Size = new System.Drawing.Size(80, 29);
+            this.metroComboBox2.TabIndex = 10;
             // 
-            // panel4
+            // gridLabel
             // 
-            this.panel4.Location = new System.Drawing.Point(357, 26);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(115, 100);
-            this.panel4.TabIndex = 6;
-            this.panel4.Visible = false;
+            this.gridLabel.AutoSize = true;
+            this.gridLabel.Location = new System.Drawing.Point(760, 52);
+            this.gridLabel.Name = "gridLabel";
+            this.gridLabel.Size = new System.Drawing.Size(62, 19);
+            this.gridLabel.TabIndex = 11;
+            this.gridLabel.Text = "Grid Tool";
             // 
-            // panel5
+            // colorLabel
             // 
-            this.panel5.Location = new System.Drawing.Point(472, 26);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(115, 100);
-            this.panel5.TabIndex = 6;
-            this.panel5.Visible = false;
+            this.colorLabel.AutoSize = true;
+            this.colorLabel.Location = new System.Drawing.Point(760, 117);
+            this.colorLabel.Name = "colorLabel";
+            this.colorLabel.Size = new System.Drawing.Size(49, 19);
+            this.colorLabel.TabIndex = 12;
+            this.colorLabel.Text = "Colour";
             // 
-            // panel6
+            // opacityLabel
             // 
-            this.panel6.Location = new System.Drawing.Point(587, 26);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(115, 100);
-            this.panel6.TabIndex = 6;
-            this.panel6.Visible = false;
+            this.opacityLabel.AutoSize = true;
+            this.opacityLabel.Location = new System.Drawing.Point(760, 189);
+            this.opacityLabel.Name = "opacityLabel";
+            this.opacityLabel.Size = new System.Drawing.Size(54, 19);
+            this.opacityLabel.TabIndex = 13;
+            this.opacityLabel.Text = "Opacity";
             // 
-            // panel8
+            // metroComboBox3
             // 
-            this.panel8.Location = new System.Drawing.Point(127, 126);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(115, 100);
-            this.panel8.TabIndex = 8;
-            this.panel8.Visible = false;
+            this.metroComboBox3.FormattingEnabled = true;
+            this.metroComboBox3.ItemHeight = 23;
+            this.metroComboBox3.Location = new System.Drawing.Point(832, 255);
+            this.metroComboBox3.Name = "metroComboBox3";
+            this.metroComboBox3.Size = new System.Drawing.Size(80, 29);
+            this.metroComboBox3.TabIndex = 16;
             // 
-            // panel12
+            // panelLabel
             // 
-            this.panel12.Location = new System.Drawing.Point(587, 126);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(115, 100);
-            this.panel12.TabIndex = 9;
-            this.panel12.Visible = false;
-            // 
-            // panel11
-            // 
-            this.panel11.Location = new System.Drawing.Point(472, 126);
-            this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(115, 100);
-            this.panel11.TabIndex = 10;
-            this.panel11.Visible = false;
-            // 
-            // panel10
-            // 
-            this.panel10.Location = new System.Drawing.Point(357, 126);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(115, 100);
-            this.panel10.TabIndex = 11;
-            this.panel10.Visible = false;
-            // 
-            // panel9
-            // 
-            this.panel9.Location = new System.Drawing.Point(242, 126);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(115, 100);
-            this.panel9.TabIndex = 12;
-            this.panel9.Visible = false;
-            // 
-            // panel7
-            // 
-            this.panel7.Location = new System.Drawing.Point(12, 126);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(115, 100);
-            this.panel7.TabIndex = 7;
-            this.panel7.Visible = false;
-            // 
-            // panel14
-            // 
-            this.panel14.Location = new System.Drawing.Point(127, 213);
-            this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(115, 100);
-            this.panel14.TabIndex = 14;
-            this.panel14.Visible = false;
-            // 
-            // panel18
-            // 
-            this.panel18.Location = new System.Drawing.Point(587, 213);
-            this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(115, 100);
-            this.panel18.TabIndex = 15;
-            this.panel18.Visible = false;
-            // 
-            // panel17
-            // 
-            this.panel17.Location = new System.Drawing.Point(472, 213);
-            this.panel17.Name = "panel17";
-            this.panel17.Size = new System.Drawing.Size(115, 100);
-            this.panel17.TabIndex = 16;
-            this.panel17.Visible = false;
-            // 
-            // panel16
-            // 
-            this.panel16.Location = new System.Drawing.Point(357, 213);
-            this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(115, 100);
-            this.panel16.TabIndex = 17;
-            this.panel16.Visible = false;
-            // 
-            // panel15
-            // 
-            this.panel15.Location = new System.Drawing.Point(242, 213);
-            this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(115, 100);
-            this.panel15.TabIndex = 18;
-            this.panel15.Visible = false;
-            // 
-            // panel13
-            // 
-            this.panel13.Location = new System.Drawing.Point(12, 213);
-            this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(115, 100);
-            this.panel13.TabIndex = 13;
-            this.panel13.Visible = false;
-            // 
-            // panel20
-            // 
-            this.panel20.Location = new System.Drawing.Point(127, 313);
-            this.panel20.Name = "panel20";
-            this.panel20.Size = new System.Drawing.Size(115, 100);
-            this.panel20.TabIndex = 20;
-            this.panel20.Visible = false;
-            // 
-            // panel24
-            // 
-            this.panel24.Location = new System.Drawing.Point(587, 313);
-            this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(115, 100);
-            this.panel24.TabIndex = 21;
-            this.panel24.Visible = false;
-            // 
-            // panel23
-            // 
-            this.panel23.Location = new System.Drawing.Point(472, 313);
-            this.panel23.Name = "panel23";
-            this.panel23.Size = new System.Drawing.Size(115, 100);
-            this.panel23.TabIndex = 22;
-            this.panel23.Visible = false;
-            // 
-            // panel22
-            // 
-            this.panel22.Location = new System.Drawing.Point(357, 313);
-            this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(115, 100);
-            this.panel22.TabIndex = 23;
-            this.panel22.Visible = false;
-            // 
-            // panel21
-            // 
-            this.panel21.Location = new System.Drawing.Point(242, 313);
-            this.panel21.Name = "panel21";
-            this.panel21.Size = new System.Drawing.Size(115, 100);
-            this.panel21.TabIndex = 24;
-            this.panel21.Visible = false;
-            // 
-            // panel19
-            // 
-            this.panel19.Location = new System.Drawing.Point(12, 313);
-            this.panel19.Name = "panel19";
-            this.panel19.Size = new System.Drawing.Size(115, 100);
-            this.panel19.TabIndex = 19;
-            this.panel19.Visible = false;
-            // 
-            // panel26
-            // 
-            this.panel26.Location = new System.Drawing.Point(127, 413);
-            this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(115, 100);
-            this.panel26.TabIndex = 26;
-            this.panel26.Visible = false;
-            // 
-            // panel30
-            // 
-            this.panel30.Location = new System.Drawing.Point(587, 413);
-            this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(115, 100);
-            this.panel30.TabIndex = 27;
-            this.panel30.Visible = false;
-            // 
-            // panel29
-            // 
-            this.panel29.Location = new System.Drawing.Point(472, 413);
-            this.panel29.Name = "panel29";
-            this.panel29.Size = new System.Drawing.Size(115, 100);
-            this.panel29.TabIndex = 28;
-            this.panel29.Visible = false;
-            // 
-            // panel28
-            // 
-            this.panel28.Location = new System.Drawing.Point(357, 413);
-            this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(115, 100);
-            this.panel28.TabIndex = 29;
-            this.panel28.Visible = false;
-            // 
-            // panel27
-            // 
-            this.panel27.Location = new System.Drawing.Point(242, 413);
-            this.panel27.Name = "panel27";
-            this.panel27.Size = new System.Drawing.Size(115, 100);
-            this.panel27.TabIndex = 30;
-            this.panel27.Visible = false;
-            // 
-            // panel25
-            // 
-            this.panel25.Location = new System.Drawing.Point(12, 413);
-            this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(115, 100);
-            this.panel25.TabIndex = 25;
-            this.panel25.Visible = false;
-            // 
-            // metroToggle1
-            // 
-            this.metroToggle1.AutoSize = true;
-            this.metroToggle1.Location = new System.Drawing.Point(792, 52);
-            this.metroToggle1.Name = "metroToggle1";
-            this.metroToggle1.Size = new System.Drawing.Size(80, 17);
-            this.metroToggle1.TabIndex = 8;
-            this.metroToggle1.Text = "Off";
-            this.metroToggle1.UseVisualStyleBackColor = true;
-            this.metroToggle1.CheckedChanged += new System.EventHandler(this.metroToggle1_CheckedChanged);
+            this.panelLabel.AutoSize = true;
+            this.panelLabel.Location = new System.Drawing.Point(760, 265);
+            this.panelLabel.Name = "panelLabel";
+            this.panelLabel.Size = new System.Drawing.Size(48, 19);
+            this.panelLabel.TabIndex = 16;
+            this.panelLabel.Text = "Panel#";
             // 
             // FireKAM
             // 
@@ -804,37 +581,14 @@ namespace MotionDetection
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox MotionCountMaxTb;
         private System.Windows.Forms.Timer timer;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel26;
-        private System.Windows.Forms.Panel panel30;
-        private System.Windows.Forms.Panel panel29;
-        private System.Windows.Forms.Panel panel28;
-        private System.Windows.Forms.Panel panel27;
-        private System.Windows.Forms.Panel panel25;
-        private System.Windows.Forms.Panel panel20;
-        private System.Windows.Forms.Panel panel24;
-        private System.Windows.Forms.Panel panel23;
-        private System.Windows.Forms.Panel panel22;
-        private System.Windows.Forms.Panel panel21;
-        private System.Windows.Forms.Panel panel19;
-        private System.Windows.Forms.Panel panel14;
-        private System.Windows.Forms.Panel panel18;
-        private System.Windows.Forms.Panel panel17;
-        private System.Windows.Forms.Panel panel16;
-        private System.Windows.Forms.Panel panel15;
-        private System.Windows.Forms.Panel panel13;
-        private System.Windows.Forms.Panel panel8;
-        private System.Windows.Forms.Panel panel12;
-        private System.Windows.Forms.Panel panel11;
-        private System.Windows.Forms.Panel panel10;
-        private System.Windows.Forms.Panel panel9;
-        private System.Windows.Forms.Panel panel7;
         private MetroFramework.Controls.MetroToggle metroToggle1;
+        private MetroFramework.Controls.MetroComboBox metroComboBox1;
+        private MetroFramework.Controls.MetroComboBox metroComboBox2;
+        private MetroFramework.Controls.MetroLabel opacityLabel;
+        private MetroFramework.Controls.MetroLabel colorLabel;
+        private MetroFramework.Controls.MetroLabel gridLabel;
+        private MetroFramework.Controls.MetroLabel panelLabel;
+        private MetroFramework.Controls.MetroComboBox metroComboBox3;
     }
 }
 

@@ -35,13 +35,13 @@ namespace MotionDetection
 
    public partial class FireKAM : MetroForm
    {
-      private Capture _capture;
-      private MotionHistory _motionHistory;
-      private BackgroundSubtractor _forgroundDetector;
-      private bool checkTimer;
-
-
-      
+        private Capture _capture;
+        private MotionHistory _motionHistory;
+        private BackgroundSubtractor _forgroundDetector;
+        private bool checkTimer;
+        Panel[] Panels = new Panel[256];
+        private int k = 0;
+        private int panelNum = 30;
 
       public FireKAM()
       {
@@ -245,7 +245,7 @@ namespace MotionDetection
 
          base.Dispose(disposing);
       }
-
+        
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             _capture.Stop();
@@ -302,79 +302,92 @@ namespace MotionDetection
 
         private void FireKAM_Load(object sender, EventArgs e)
         {
-
-            for (int i = 0; i < 30; i++)
+            
+            for (int i = 0; i < 120; i++)
             {
-                var P = Controls.Find("panel{i}",true);
-                //P.Name = "";
-                //P.Parent = capturedImageBox;
-               // P.BackColor = Color.Transparent;
+                if (i == 6 || i == 12 || i == 18 || i == 24)
+                {
+                    k++;
+                }
+                
+                Panels[i] = new Panel();
+
+                Panels[i].BackColor = Color.Transparent;
+                Panels[i].Location = new Point(0 + (115 * (i - (k * 6))), 3 + (100 * k));
+
+                Panels[i].Click += new EventHandler(paneli_Click);
+
+                Panels[i].Size = new Size(115, 100);
+                //Panels[i].Size = new Size(capturedImageBox.Width / 6, capturedImageBox.Height/5);
+                Panels[i].Visible = false;
+
+                Panels[i].BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                capturedImageBox.Controls.Add(Panels[i]);
 
             }
-            // dont touch this garabage code
             
-            /*
-            panel2.Parent = capturedImageBox;
-            panel2.BackColor = Color.Transparent;
-            panel3.Parent = capturedImageBox;
-            panel3.BackColor = Color.Transparent;
-            panel5.Parent = capturedImageBox;
-            panel5.BackColor = Color.Transparent;
-            panel4.Parent = capturedImageBox;
-            panel4.BackColor = Color.Transparent;
-            panel6.Parent = capturedImageBox;
-            panel6.BackColor = Color.Transparent;*/
-        }
+            metroComboBox2.Items.Insert(0,"160");
+            metroComboBox2.Items.Add("200");
+            metroComboBox2.Items.Add("240");
+            metroComboBox2.Items.Add("255");
+            metroComboBox2.SelectedIndex = 0;
+            
+            metroComboBox1.Items.Insert(0, "Black");
+            metroComboBox1.Items.Add("Red");
+            metroComboBox1.Items.Add("Blue");
+            metroComboBox1.SelectedIndex = 0;
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            //if (metroPanel1.BorderStyle == BorderStyle.FixedSingle)
-            //{
-            //    int thickness = 3;//it's up to you
-            //    int halfThickness = thickness / 2;
-            //    using (Pen p = new Pen(Color.Black, thickness))
-            //    {
-            //        e.Graphics.DrawRectangle(p, new Rectangle(halfThickness,
-            //                                                  halfThickness,
-            //                                                  metroPanel1.ClientSize.Width - thickness,
-            //                                                  metroPanel1.ClientSize.Height - thickness));
-            //    }
-            //}
-        }
+            metroComboBox3.Items.Insert(0,"30");
+            metroComboBox3.Items.Add("120");
+            metroComboBox3.SelectedIndex = 0;
+
+            metroComboBox2.Enabled = false;
+            metroComboBox1.Enabled = false;
+        }  
 
         private void metroToggle1_CheckedChanged(object sender, EventArgs e)
         {
-            panel1.Visible ^= true;
-            panel2.Visible ^= true;
-            panel3.Visible ^= true;
-            panel4.Visible ^= true;
-            panel5.Visible ^= true;
-            panel6.Visible ^= true;
-            panel7.Visible ^= true;
-            panel8.Visible ^= true;
-            panel9.Visible ^= true;
-            panel10.Visible ^= true;
-            panel11.Visible ^= true;
-            panel12.Visible ^= true;
-            panel13.Visible ^= true;
-            panel14.Visible ^= true;
-            panel15.Visible ^= true;
-            panel16.Visible ^= true;
-            panel17.Visible ^= true;
-            panel18.Visible ^= true;
-            panel19.Visible ^= true;
-            panel20.Visible ^= true;
-            panel21.Visible ^= true;
-            panel22.Visible ^= true;
-            panel23.Visible ^= true;
-            panel24.Visible ^= true;
-            panel25.Visible ^= true;
-            panel26.Visible ^= true;
-            panel27.Visible ^= true;
-            panel28.Visible ^= true;
-            panel29.Visible ^= true;
-            panel30.Visible ^= true;
+            for (int i = 0; i < 30; i++)
+            {
+                Panels[i].Visible ^= true;
+            }
+            metroComboBox2.Enabled ^= true;
+            metroComboBox1.Enabled ^= true;
         }
+
+        private void paneli_Click(object sender, EventArgs e)
+        {
+            Color customColor = Color.Black;
+
+            if (metroComboBox1.Text == "Black")
+            {
+                customColor = Color.Black;
+            }
+            else if (metroComboBox1.Text == "Red")
+            {
+                customColor = Color.DarkRed;
+            }
+            else if (metroComboBox1.Text == "Blue")
+            {
+                customColor = Color.DarkBlue;
+            }
+
+            for (int i = 0; i < panelNum; i++)
+            if (sender == Panels[i])
+            {
+                if (Panels[i].BackColor == Color.FromArgb(Convert.ToInt32(metroComboBox2.Text), customColor))
+                {
+                    Panels[i].BackColor = Color.Transparent;
+                }
+                else
+                {
+                    Panels[i].BackColor = Color.FromArgb(Convert.ToInt32(metroComboBox2.Text), customColor);
+                }
+            }
+            
+        }
+
+       
 
         
     }
