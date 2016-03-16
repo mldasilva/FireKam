@@ -36,7 +36,9 @@ namespace MotionDetection
         private BackgroundSubtractor _forgroundDetector;
         private bool checkTimer;
         Heatmap pHeatmap;
-
+        Panel[] Panels = new Panel[256];
+        private int k = 0;
+        private int panelNum = 30;
 
         public FireKAM()
         {
@@ -48,7 +50,7 @@ namespace MotionDetection
             chart1.Series["Camera"].XValueType = ChartValueType.Auto;
             chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
             pHeatmap = new Heatmap();
-            pictureBox3.Parent = capturedImageBox;
+            //pictureBox3.Parent = capturedImageBox;
 
             //try to create the capture
             if (_capture == null)
@@ -273,9 +275,79 @@ namespace MotionDetection
 
         private void FireKAM_Load(object sender, EventArgs e)
         {
+            for (int i = 0; i < 120; i++)
+            {
+                if (i == 6 || i == 12 || i == 18 || i == 24)
+                {
+                    k++;
+                }
 
+                Panels[i] = new Panel();
+
+                Panels[i].BackColor = Color.Transparent;
+                Panels[i].Location = new Point(0 + (115 * (i - (k * 6))), 3 + (100 * k));
+
+                Panels[i].Click += new EventHandler(paneli_Click);
+
+                Panels[i].Size = new Size(115, 100);
+                //Panels[i].Size = new Size(capturedImageBox.Width / 6, capturedImageBox.Height/5);
+                Panels[i].Visible = false;
+
+                Panels[i].BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                capturedImageBox.Controls.Add(Panels[i]);
+
+            }
+
+            metroComboBox2.Items.Insert(0, "160");
+            metroComboBox2.Items.Add("200");
+            metroComboBox2.Items.Add("240");
+            metroComboBox2.Items.Add("255");
+            metroComboBox2.SelectedIndex = 0;
+
+            metroComboBox1.Items.Insert(0, "Black");
+            metroComboBox1.Items.Add("Red");
+            metroComboBox1.Items.Add("Blue");
+            metroComboBox1.SelectedIndex = 0;
+
+            metroComboBox3.Items.Insert(0, "30");
+            metroComboBox3.Items.Add("120");
+            metroComboBox3.SelectedIndex = 0;
+
+            metroComboBox2.Enabled = false;
+            metroComboBox1.Enabled = false;
         }
 
+        private void paneli_Click(object sender, EventArgs e)
+        {
+            Color customColor = Color.Black;
+
+            if (metroComboBox1.Text == "Black")
+            {
+                customColor = Color.Black;
+            }
+            else if (metroComboBox1.Text == "Red")
+            {
+                customColor = Color.DarkRed;
+            }
+            else if (metroComboBox1.Text == "Blue")
+            {
+                customColor = Color.DarkBlue;
+            }
+
+            for (int i = 0; i < panelNum; i++)
+                if (sender == Panels[i])
+                {
+                    if (Panels[i].BackColor == Color.FromArgb(Convert.ToInt32(metroComboBox2.Text), customColor))
+                    {
+                        Panels[i].BackColor = Color.Transparent;
+                    }
+                    else
+                    {
+                        Panels[i].BackColor = Color.FromArgb(Convert.ToInt32(metroComboBox2.Text), customColor);
+                    }
+                }
+
+        }
         private void ToPDF_Click(object sender, EventArgs e)
         {
             msmMain.Theme = MetroFramework.MetroThemeStyle.Dark;
@@ -463,6 +535,16 @@ namespace MotionDetection
         private void metroButton1_Click(object sender, EventArgs e)
         {
             splitBitmap();
+        }
+
+        private void metroToggle1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                Panels[i].Visible ^= true;
+            }
+            metroComboBox2.Enabled ^= true;
+            metroComboBox1.Enabled ^= true;
         }
     }
 }
