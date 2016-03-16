@@ -31,6 +31,7 @@ namespace MotionDetection
 {
    public partial class FireKAM : MetroForm
    {
+<<<<<<< HEAD
         private Capture _capture;
         private MotionHistory _motionHistory;
         private BackgroundSubtractor _forgroundDetector;
@@ -40,15 +41,35 @@ namespace MotionDetection
 
         public FireKAM()
         {
+=======
+      private Capture _capture;
+      private MotionHistory _motionHistory;
+      private BackgroundSubtractor _forgroundDetector;
+      private bool checkTimer;
+
+      public FireKAM()
+      {
+>>>>>>> origin/master
             InitializeComponent();
             checkTimer = true;
             timer.Start();
             this.StyleManager = msmMain;
+<<<<<<< HEAD
             ReportTypeCB.SelectedIndex = 0;
             chart1.Series["Camera"].XValueType = ChartValueType.Auto;
             chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
             pHeatmap = new Heatmap();
             pictureBox3.Parent = capturedImageBox;
+=======
+            //this.chart1.Series["Camera"].Points.AddXY("Max", 200);
+            //this.chart1.Series["Camera"].Points.AddXY("Max", 33);
+            //this.chart1.Series["Camera"].Points.AddXY("Max", 33);
+            chart1.Series["Camera"].XValueType = ChartValueType.DateTime;
+            System.DateTime x = DateTime.Now;
+            chart1.Series[0].Points.AddXY(x.ToOADate(),34);
+
+            
+>>>>>>> origin/master
 
             //try to create the capture
             if (_capture == null)
@@ -304,6 +325,7 @@ namespace MotionDetection
                 checkTimer = true;
             }
         }
+<<<<<<< HEAD
 
         private async void GenerateChartBtn_Click(object sender, EventArgs e)
         {
@@ -464,5 +486,7 @@ namespace MotionDetection
         {
             splitBitmap();
         }
+=======
+>>>>>>> origin/master
     }
 }

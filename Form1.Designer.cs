@@ -69,7 +69,10 @@ namespace MotionDetection
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
             this.timer = new System.Windows.Forms.Timer(this.components);
+<<<<<<< HEAD
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+=======
+>>>>>>> origin/master
             ((System.ComponentModel.ISupportInitialize)(this.msmMain)).BeginInit();
             this.Page3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -156,6 +159,7 @@ namespace MotionDetection
             this.Page3.Text = "Graphs";
             this.Page3.VerticalScrollbarBarColor = true;
             this.Page3.VerticalScrollbarSize = 20;
+<<<<<<< HEAD
             // 
             // dateTimePicker2
             // 
@@ -200,11 +204,17 @@ namespace MotionDetection
             this.label11.Size = new System.Drawing.Size(130, 25);
             this.label11.TabIndex = 32;
             this.label11.Text = "Report Type";
+=======
+>>>>>>> origin/master
             // 
             // label10
             // 
             this.label10.AutoSize = true;
+<<<<<<< HEAD
             this.label10.Location = new System.Drawing.Point(389, 332);
+=======
+            this.label10.Location = new System.Drawing.Point(389, 238);
+>>>>>>> origin/master
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(53, 25);
             this.label10.TabIndex = 30;
@@ -212,7 +222,11 @@ namespace MotionDetection
             // 
             // MotionCountMaxTb
             // 
+<<<<<<< HEAD
             this.MotionCountMaxTb.Location = new System.Drawing.Point(363, 360);
+=======
+            this.MotionCountMaxTb.Location = new System.Drawing.Point(363, 266);
+>>>>>>> origin/master
             this.MotionCountMaxTb.Name = "MotionCountMaxTb";
             this.MotionCountMaxTb.Size = new System.Drawing.Size(100, 31);
             this.MotionCountMaxTb.TabIndex = 29;
@@ -220,7 +234,11 @@ namespace MotionDetection
             // label9
             // 
             this.label9.AutoSize = true;
+<<<<<<< HEAD
             this.label9.Location = new System.Drawing.Point(246, 335);
+=======
+            this.label9.Location = new System.Drawing.Point(246, 241);
+>>>>>>> origin/master
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(47, 25);
             this.label9.TabIndex = 28;
@@ -229,15 +247,31 @@ namespace MotionDetection
             // label8
             // 
             this.label8.AutoSize = true;
+<<<<<<< HEAD
             this.label8.Location = new System.Drawing.Point(524, 247);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(50, 25);
             this.label8.TabIndex = 27;
             this.label8.Text = "End";
+=======
+            this.label8.Location = new System.Drawing.Point(389, 147);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(53, 25);
+            this.label8.TabIndex = 27;
+            this.label8.Text = "Max";
+            // 
+            // TimeMaxTb
+            // 
+            this.TimeMaxTb.Location = new System.Drawing.Point(363, 175);
+            this.TimeMaxTb.Name = "TimeMaxTb";
+            this.TimeMaxTb.Size = new System.Drawing.Size(100, 31);
+            this.TimeMaxTb.TabIndex = 26;
+>>>>>>> origin/master
             // 
             // label7
             // 
             this.label7.AutoSize = true;
+<<<<<<< HEAD
             this.label7.Location = new System.Drawing.Point(231, 247);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(187, 25);
@@ -247,6 +281,24 @@ namespace MotionDetection
             // MotionCountMinTb
             // 
             this.MotionCountMinTb.Location = new System.Drawing.Point(220, 363);
+=======
+            this.label7.Location = new System.Drawing.Point(246, 147);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(47, 25);
+            this.label7.TabIndex = 25;
+            this.label7.Text = "Min";
+            // 
+            // TimeMinTb
+            // 
+            this.TimeMinTb.Location = new System.Drawing.Point(220, 175);
+            this.TimeMinTb.Name = "TimeMinTb";
+            this.TimeMinTb.Size = new System.Drawing.Size(100, 31);
+            this.TimeMinTb.TabIndex = 24;
+            // 
+            // MotionCountMinTb
+            // 
+            this.MotionCountMinTb.Location = new System.Drawing.Point(220, 269);
+>>>>>>> origin/master
             this.MotionCountMinTb.Name = "MotionCountMinTb";
             this.MotionCountMinTb.Size = new System.Drawing.Size(100, 31);
             this.MotionCountMinTb.TabIndex = 23;
@@ -261,7 +313,11 @@ namespace MotionDetection
             // label6
             // 
             this.label6.AutoSize = true;
+<<<<<<< HEAD
             this.label6.Location = new System.Drawing.Point(29, 366);
+=======
+            this.label6.Location = new System.Drawing.Point(29, 272);
+>>>>>>> origin/master
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(140, 25);
             this.label6.TabIndex = 21;
@@ -270,7 +326,11 @@ namespace MotionDetection
             // label5
             // 
             this.label5.AutoSize = true;
+<<<<<<< HEAD
             this.label5.Location = new System.Drawing.Point(110, 275);
+=======
+            this.label5.Location = new System.Drawing.Point(110, 181);
+>>>>>>> origin/master
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 25);
             this.label5.TabIndex = 20;
@@ -287,7 +347,11 @@ namespace MotionDetection
             // 
             // GenerateChartBtn
             // 
+<<<<<<< HEAD
             this.GenerateChartBtn.Location = new System.Drawing.Point(150, 458);
+=======
+            this.GenerateChartBtn.Location = new System.Drawing.Point(150, 418);
+>>>>>>> origin/master
             this.GenerateChartBtn.Margin = new System.Windows.Forms.Padding(6);
             this.GenerateChartBtn.Name = "GenerateChartBtn";
             this.GenerateChartBtn.Size = new System.Drawing.Size(170, 63);
@@ -297,7 +361,11 @@ namespace MotionDetection
             // 
             // ToPDF
             // 
+<<<<<<< HEAD
             this.ToPDF.Location = new System.Drawing.Point(1610, 914);
+=======
+            this.ToPDF.Location = new System.Drawing.Point(1610, 790);
+>>>>>>> origin/master
             this.ToPDF.Margin = new System.Windows.Forms.Padding(6);
             this.ToPDF.Name = "ToPDF";
             this.ToPDF.Size = new System.Drawing.Size(170, 63);
@@ -307,6 +375,7 @@ namespace MotionDetection
             // 
             // chart1
             // 
+<<<<<<< HEAD
             chartArea20.AxisX.Interval = 1D;
             chartArea20.AxisX.MajorGrid.LineWidth = 0;
             chartArea20.AxisX.Minimum = 0D;
@@ -338,6 +407,20 @@ namespace MotionDetection
             this.chart1.Series.Add(series39);
             this.chart1.Series.Add(series40);
             this.chart1.Size = new System.Drawing.Size(954, 861);
+=======
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(596, 21);
+            this.chart1.Margin = new System.Windows.Forms.Padding(6);
+            this.chart1.Name = "chart1";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Camera";
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(1202, 577);
+>>>>>>> origin/master
             this.chart1.TabIndex = 11;
             this.chart1.Text = "chart1";
             // 
@@ -363,6 +446,7 @@ namespace MotionDetection
             this.Page2.Text = "Motion View";
             this.Page2.VerticalScrollbarBarColor = true;
             this.Page2.VerticalScrollbarSize = 20;
+<<<<<<< HEAD
             // 
             // metroButton7
             // 
@@ -445,12 +529,18 @@ namespace MotionDetection
             this.metroButton1.TabIndex = 16;
             this.metroButton1.Text = "1";
             this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
+=======
+>>>>>>> origin/master
             // 
             // MotionPanel
             // 
             this.MotionPanel.Controls.Add(this.label1);
             this.MotionPanel.Controls.Add(this.motionImageBox);
+<<<<<<< HEAD
             this.MotionPanel.Location = new System.Drawing.Point(444, 32);
+=======
+            this.MotionPanel.Location = new System.Drawing.Point(112, 50);
+>>>>>>> origin/master
             this.MotionPanel.Margin = new System.Windows.Forms.Padding(4);
             this.MotionPanel.Name = "MotionPanel";
             this.MotionPanel.Size = new System.Drawing.Size(1382, 1013);
@@ -468,7 +558,10 @@ namespace MotionDetection
             // 
             // motionImageBox
             // 
+<<<<<<< HEAD
             this.motionImageBox.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
+=======
+>>>>>>> origin/master
             this.motionImageBox.Location = new System.Drawing.Point(6, 62);
             this.motionImageBox.Margin = new System.Windows.Forms.Padding(6);
             this.motionImageBox.Name = "motionImageBox";
@@ -492,6 +585,7 @@ namespace MotionDetection
             // 
             // PedestrianPanel
             // 
+<<<<<<< HEAD
             this.PedestrianPanel.BackColor = System.Drawing.SystemColors.Control;
             this.PedestrianPanel.Controls.Add(this.pictureBox3);
             this.PedestrianPanel.Controls.Add(this.capturedImageBox);
@@ -501,12 +595,24 @@ namespace MotionDetection
             this.PedestrianPanel.Margin = new System.Windows.Forms.Padding(4);
             this.PedestrianPanel.Name = "PedestrianPanel";
             this.PedestrianPanel.Size = new System.Drawing.Size(1830, 1122);
+=======
+            this.PedestrianPanel.Controls.Add(this.label4);
+            this.PedestrianPanel.Controls.Add(this.capturedImageBox);
+            this.PedestrianPanel.Location = new System.Drawing.Point(70, 50);
+            this.PedestrianPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.PedestrianPanel.Name = "PedestrianPanel";
+            this.PedestrianPanel.Size = new System.Drawing.Size(1424, 1013);
+>>>>>>> origin/master
             this.PedestrianPanel.TabIndex = 7;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
+<<<<<<< HEAD
             this.label4.Location = new System.Drawing.Point(840, 15);
+=======
+            this.label4.Location = new System.Drawing.Point(612, 19);
+>>>>>>> origin/master
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(212, 25);
@@ -516,10 +622,17 @@ namespace MotionDetection
             // capturedImageBox
             // 
             this.capturedImageBox.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.PanAndZoom;
+<<<<<<< HEAD
             this.capturedImageBox.Location = new System.Drawing.Point(6, 50);
             this.capturedImageBox.Margin = new System.Windows.Forms.Padding(6);
             this.capturedImageBox.Name = "capturedImageBox";
             this.capturedImageBox.Size = new System.Drawing.Size(1818, 1066);
+=======
+            this.capturedImageBox.Location = new System.Drawing.Point(24, 50);
+            this.capturedImageBox.Margin = new System.Windows.Forms.Padding(6);
+            this.capturedImageBox.Name = "capturedImageBox";
+            this.capturedImageBox.Size = new System.Drawing.Size(1384, 936);
+>>>>>>> origin/master
             this.capturedImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.capturedImageBox.TabIndex = 0;
             this.capturedImageBox.TabStop = false;
@@ -575,11 +688,19 @@ namespace MotionDetection
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
             this.metroTabControl1.Controls.Add(this.Page3);
             this.metroTabControl1.Controls.Add(this.Page2);
+<<<<<<< HEAD
+=======
+            this.metroTabControl1.Controls.Add(this.Page3);
+>>>>>>> origin/master
             this.metroTabControl1.Controls.Add(this.Page1);
             this.metroTabControl1.Location = new System.Drawing.Point(432, 58);
             this.metroTabControl1.Margin = new System.Windows.Forms.Padding(6);
             this.metroTabControl1.Name = "metroTabControl1";
+<<<<<<< HEAD
             this.metroTabControl1.SelectedIndex = 3;
+=======
+            this.metroTabControl1.SelectedIndex = 2;
+>>>>>>> origin/master
             this.metroTabControl1.Size = new System.Drawing.Size(1846, 1172);
             this.metroTabControl1.TabIndex = 11;
             // 
@@ -598,6 +719,7 @@ namespace MotionDetection
             this.timer.Interval = 5000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
+<<<<<<< HEAD
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
@@ -608,6 +730,8 @@ namespace MotionDetection
             this.pictureBox3.TabIndex = 29;
             this.pictureBox3.TabStop = false;
             // 
+=======
+>>>>>>> origin/master
             // FireKAM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -687,6 +811,7 @@ namespace MotionDetection
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox MotionCountMaxTb;
         private System.Windows.Forms.Timer timer;
+<<<<<<< HEAD
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox ReportTypeCB;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
@@ -702,6 +827,8 @@ namespace MotionDetection
         private MetroFramework.Controls.MetroButton metroButton1;
         private MetroFramework.Controls.MetroTabPage metroTabPage1;
         private System.Windows.Forms.PictureBox pictureBox3;
+=======
+>>>>>>> origin/master
     }
 }
 
