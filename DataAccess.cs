@@ -55,11 +55,15 @@ namespace MotionDetection
             database = client.GetDatabase("firekam");
             var collection = database.GetCollection<BsonDocument>("record");
 
-            var filter = Builders<BsonDocument>.Filter.Gt("Time", minTime) & Builders<BsonDocument>.Filter.Lt("Time", maxTime );
-            var result = await collection.Find(filter).ToListAsync();
-            //var aggregate = collection.Aggregate().Group(new BsonDocument { {"_id", 0 }, { "MotionCount", new BsonDocument("$sum", "$MotionCout") } });
-            //var results = await aggregate.ToListAsync();
-            return result[0].GetElement("MotionCount").Value.ToString();
+            var filter = Builders<BsonDocument>.Filter.Gt("Time", minTime) & Builders<BsonDocument>.Filter.Lt("Time", maxTime);
+            //var resultFirst = await collection.Find(filter).ToListAsync();
+            var aggregate = collection.Aggregate().Match(filter).Group(new BsonDocument { {"_id", 0 }, { "MotionCount", new BsonDocument("$sum", "$MotionCout") } });
+            var results = await aggregate.ToListAsync();
+            if(results.Count == 0)
+            {
+                return "no result";
+            }
+            return results[0].GetElement("MotionCount").Value.ToString();
         }
 
         //test

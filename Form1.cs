@@ -5,11 +5,7 @@
 // Install-Package MetroFramework
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -18,7 +14,6 @@ using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 using System.Diagnostics;
-using ZedGraph;
 using Emgu.CV.GPU;
 
 using System.IO;
@@ -29,50 +24,47 @@ using System.Windows.Forms.DataVisualization.Charting;
 using MetroFramework.Forms;
 using MongoDB.Bson;
 using System.Timers;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 
 namespace MotionDetection
 {
-
    public partial class FireKAM : MetroForm
    {
-      private Capture _capture;
-      private MotionHistory _motionHistory;
-      private BackgroundSubtractor _forgroundDetector;
-      private bool checkTimer;
+        private Capture _capture;
+        private MotionHistory _motionHistory;
+        private BackgroundSubtractor _forgroundDetector;
+        private bool checkTimer;
+        Heatmap pHeatmap;
+        Panel[] Panels = new Panel[256];
+        private int k = 0;
+        private int panelNum = 30;
 
-
-      
-
-      public FireKAM()
-      {
+        public FireKAM()
+        {
             InitializeComponent();
             checkTimer = true;
             timer.Start();
             this.StyleManager = msmMain;
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 200);
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 33);
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 33);
-            chart1.Series["Camera"].XValueType = ChartValueType.DateTime;
-            System.DateTime x = DateTime.Now;
-            chart1.Series[0].Points.AddXY(x.ToOADate(),34);
-
-            
-            
-            
+            ReportTypeCB.SelectedIndex = 0;
+            chart1.Series["Camera"].XValueType = ChartValueType.Auto;
+            chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            pHeatmap = new Heatmap();
+            //pictureBox3.Parent = capturedImageBox;
 
             //try to create the capture
             if (_capture == null)
-         {
-            try
             {
-                //"..\\..\\videoplayback480p.mp4"
-                _capture = new Capture("..\\..\\videoplayback480p.mp4");
-            }
-            catch (NullReferenceException excpt)
-            {   //show errors if there is any
-               MessageBox.Show(excpt.Message);
-            }
-         }
+                try
+                {
+                    //"..\\..\\videoplayback480p.mp4"
+                    _capture = new Capture("..\\..\\videoplayback720p.mp4");
+                }
+                catch (NullReferenceException excpt)
+                {   //show errors if there is any
+                    MessageBox.Show(excpt.Message);
+                }
+                }
 
          if (_capture != null) //if camera capture has been successfully created
          {
@@ -86,10 +78,12 @@ namespace MotionDetection
          }
       }
 
-      private Mat _segMask = new Mat();
-      private Mat _forgroundMask = new Mat();
-      private async void ProcessFrame(object sender, EventArgs e)
-      {
+        private Mat _segMask = new Mat();
+        private Mat _forgroundMask = new Mat();
+        Heatmap myHeatMap = new Heatmap();
+
+        private async void ProcessFrame(object sender, EventArgs e)
+        {
             Mat image = new Mat();
 
             _capture.Retrieve(image);
@@ -133,10 +127,13 @@ namespace MotionDetection
             int motionCount = 0;
             //iterate through each of the motion component
             foreach (System.Drawing.Rectangle comp in rects)
-            {
+            {              
                 int area = comp.Width * comp.Height;
                 //reject the components that have small area;
                 if (area < minArea) continue;
+
+                //create heatmap
+                myHeatMap.heatPoints.Add(new HeatPoint(comp.X, comp.Y, 32));
 
                 // find the angle and motion pixel count of the specific area
                 double angle, motionPixelCount;
@@ -149,6 +146,13 @@ namespace MotionDetection
                 DrawMotion(motionImage, comp, angle, new Bgr(Color.Red));
                 motionCount++;
             }
+
+            //pictureBox3.BackgroundImage = myHeatMap.CreateHeatmap();
+            Bitmap b = (Bitmap)myHeatMap.CreateHeatmap();
+            //Image<Gray, Byte> normalizedMasterImage = new Image<Gray, Byte>(b);
+            //motionImage = normalizedMasterImage.Mat;
+            pictureBox3.BackgroundImage = b;
+            
 
             // find and draw the overall motion angle
             double overallAngle, overallMotionPixelCount;
@@ -189,16 +193,13 @@ namespace MotionDetection
                 await DataAccess.Insert(document);
             }
 
-            //test string
-            //string a = await DataAccess.FindByTime("2016-02-22 03:00:00", "2016-02-28 02:00:00");
-
             motionCount = 0;
             //Display the image of the motion
             motionImageBox.Image = motionImage;
 
       }
 
-      private void UpdateText(String text)
+        private void UpdateText(String text)
       {
          if (!IsDisposed && !Disposing && InvokeRequired)
          {
@@ -270,7 +271,83 @@ namespace MotionDetection
             PedestrianPanel.Visible = true;
         }
 
+       
 
+        private void FireKAM_Load(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 120; i++)
+            {
+                if (i == 6 || i == 12 || i == 18 || i == 24)
+                {
+                    k++;
+                }
+
+                Panels[i] = new Panel();
+
+                Panels[i].BackColor = Color.Transparent;
+                Panels[i].Location = new Point(0 + (115 * (i - (k * 6))), 3 + (100 * k));
+
+                Panels[i].Click += new EventHandler(paneli_Click);
+
+                Panels[i].Size = new Size(115, 100);
+                //Panels[i].Size = new Size(capturedImageBox.Width / 6, capturedImageBox.Height/5);
+                Panels[i].Visible = false;
+
+                Panels[i].BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                capturedImageBox.Controls.Add(Panels[i]);
+
+            }
+
+            metroComboBox2.Items.Insert(0, "160");
+            metroComboBox2.Items.Add("200");
+            metroComboBox2.Items.Add("240");
+            metroComboBox2.Items.Add("255");
+            metroComboBox2.SelectedIndex = 0;
+
+            metroComboBox1.Items.Insert(0, "Black");
+            metroComboBox1.Items.Add("Red");
+            metroComboBox1.Items.Add("Blue");
+            metroComboBox1.SelectedIndex = 0;
+
+            metroComboBox3.Items.Insert(0, "30");
+            metroComboBox3.Items.Add("120");
+            metroComboBox3.SelectedIndex = 0;
+
+            metroComboBox2.Enabled = false;
+            metroComboBox1.Enabled = false;
+        }
+
+        private void paneli_Click(object sender, EventArgs e)
+        {
+            Color customColor = Color.Black;
+
+            if (metroComboBox1.Text == "Black")
+            {
+                customColor = Color.Black;
+            }
+            else if (metroComboBox1.Text == "Red")
+            {
+                customColor = Color.DarkRed;
+            }
+            else if (metroComboBox1.Text == "Blue")
+            {
+                customColor = Color.DarkBlue;
+            }
+
+            for (int i = 0; i < panelNum; i++)
+                if (sender == Panels[i])
+                {
+                    if (Panels[i].BackColor == Color.FromArgb(Convert.ToInt32(metroComboBox2.Text), customColor))
+                    {
+                        Panels[i].BackColor = Color.Transparent;
+                    }
+                    else
+                    {
+                        Panels[i].BackColor = Color.FromArgb(Convert.ToInt32(metroComboBox2.Text), customColor);
+                    }
+                }
+
+        }
         private void ToPDF_Click(object sender, EventArgs e)
         {
             msmMain.Theme = MetroFramework.MetroThemeStyle.Dark;
@@ -300,82 +377,174 @@ namespace MotionDetection
             }
         }
 
-        private void FireKAM_Load(object sender, EventArgs e)
+        private async void GenerateChartBtn_Click(object sender, EventArgs e)
         {
+            foreach (var series in chart1.Series)
+            {
+                series.Points.Clear();
+            }
+            //DateTime min = new DateTime(2016, 03, 08);
+            //DateTime max = new DateTime(2016, 12, 31);
+            DateTime min = dateTimePicker1.Value.Date;
+            DateTime max = dateTimePicker2.Value.Date;
+            //yearly report
+            if (ReportTypeCB.SelectedIndex == 3)
+            {             
+                for (int i = 0; i < (max.Year - min.Year) + 1; i++)
+                {
+                    DateTime firstDayOfYear = new DateTime(min.Year, 1, 1);
+                    string result = await DataAccess.FindByTime(GetDateTimeString(firstDayOfYear.AddYears(i)), GetDateTimeString(min.AddYears(i + 1).AddMilliseconds(-1)));
+                    if (result != "no result")
+                    {
+                        chart1.Series[0].Points.AddXY(i + 1, int.Parse(result));
+                        chart1.Series[1].Points.AddXY(i + 1, int.Parse(result));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(i + 1, 0);
+                        chart1.Series[1].Points.AddXY(i + 1, 0);
+                    }
+                }
+            }
+            //monthly report
+            else if(ReportTypeCB.SelectedIndex == 2)
+            {              
+                for(int i = 0; i < 12; i++)
+                {
+                    //-1 millisecond to get the last second of the year
+                    DateTime firstDayOfYear = new DateTime(min.Year, 1, 1);
+                    string result = await DataAccess.FindByTime(GetDateTimeString(firstDayOfYear.AddMonths(i)), GetDateTimeString(min.AddMonths(i+1).AddMilliseconds(-1)));
+                    if (result != "no result")
+                    {
+                        chart1.Series[0].Points.AddXY(i + 1, int.Parse(result));
+                        chart1.Series[1].Points.AddXY(i + 1, int.Parse(result));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(i + 1, 0);
+                        chart1.Series[1].Points.AddXY(i + 1, 0);
+                    }
+                }               
+            }
+            //daily report
+            else if (ReportTypeCB.SelectedIndex == 1)
+            {
+                for (int i = 0; i < (max-min).TotalDays; i++)
+                {
+                    string result = await DataAccess.FindByTime(GetDateTimeString(min.AddDays(i)), GetDateTimeString(min.AddDays(i + 1)));
+                    if (result != "no result")
+                    {
+                        chart1.Series[0].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), int.Parse(result));
+                        chart1.Series[1].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), int.Parse(result));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), 0);
+                        chart1.Series[1].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), 0);
+                    }
+                } 
+            }
+            //hourly report
+            else if (ReportTypeCB.SelectedIndex == 0)
+            {
+                //db.record.find({ "Time":{$gt: "2016-03-08 00:00:00", $lt: "2016-03-08 01:00:00"} })
+                //db.record.insert({ "Camera":"Camera1","Time":"2016-03-08 09:12:12","MotionCout":1234})
+                for (int i = 0; i < 24; i++)
+                {
+                    string result = await DataAccess.FindByTime(GetDateTimeString(min.AddHours(i)), GetDateTimeString(min.AddHours(i + 1)));
+                    if (result != "no result")
+                    {
+                        chart1.Series[0].Points.AddXY(i, int.Parse(result));
+                        chart1.Series[1].Points.AddXY(i, int.Parse(result));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(i, 0);
+                        chart1.Series[1].Points.AddXY(i, 0);
+                    }
+                }
+            }
+        }
+              
+        //convert datetime to 0000-00-00 format
+        private string GetDateTimeString(DateTime date)
+        {
+            string result;
+            result = date.Year + "-" + date.Month.ToString("00") + "-" + date.Day.ToString("00") + " " + date.Hour.ToString("00") + ":" + date.Minute.ToString("00") + ":" + date.Second.ToString("00");
+            return result;
+        }
 
+        private void ReportTypeCB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(ReportTypeCB.SelectedIndex == 0)
+            {
+                label8.Visible = false;
+                dateTimePicker2.Visible = false;
+                dateTimePicker1.CustomFormat = "dd-MM-yyyy";
+            }
+            else if(ReportTypeCB.SelectedIndex == 1)
+            {
+                label8.Visible = true;
+                dateTimePicker2.Visible = true;
+                dateTimePicker1.CustomFormat = "dd-MM-yyyy";
+                dateTimePicker2.CustomFormat = "dd-MM-yyyy";
+            }
+            else if(ReportTypeCB.SelectedIndex == 2)
+            {
+                label8.Visible = false;
+                dateTimePicker2.Visible = false;
+                dateTimePicker1.CustomFormat = "yyyy";
+            }
+            else if(ReportTypeCB.SelectedIndex == 3)
+            {
+                label8.Visible = true;
+                dateTimePicker2.Visible = true;
+                dateTimePicker1.CustomFormat = "yyyy";
+            }
+        }
+
+        public Bitmap[] splitBitmap()
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            System.Drawing.Bitmap original;
+            System.Drawing.Bitmap temp;
+            if (openDialog.ShowDialog() == DialogResult.OK)
+            {
+                original = new Bitmap(openDialog.FileName);
+            }
+            else
+            {
+                original = new Bitmap("FireKamlogo2.ico");
+            }
+            System.Drawing.Rectangle image1Rect = new System.Drawing.Rectangle(0,0, original.Width/3,original.Height/3);
+            System.Drawing.Rectangle image2Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image3Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image4Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image5Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image6Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image7Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image8Rect = new System.Drawing.Rectangle();
+            System.Drawing.Rectangle image9Rect = new System.Drawing.Rectangle();
+
+            Bitmap[] imgs = new Bitmap[9];
+            imgs[0] = original.Clone(image1Rect, original.PixelFormat);
+            //assign imgs[0] to buttom background
+            return imgs;
+        }
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            splitBitmap();
+        }
+
+        private void metroToggle1_CheckedChanged_1(object sender, EventArgs e)
+        {
             for (int i = 0; i < 30; i++)
             {
-                var P = Controls.Find("panel{i}",true);
-                //P.Name = "";
-                //P.Parent = capturedImageBox;
-               // P.BackColor = Color.Transparent;
-
+                Panels[i].Visible ^= true;
             }
-            // dont touch this garabage code
-            
-            /*
-            panel2.Parent = capturedImageBox;
-            panel2.BackColor = Color.Transparent;
-            panel3.Parent = capturedImageBox;
-            panel3.BackColor = Color.Transparent;
-            panel5.Parent = capturedImageBox;
-            panel5.BackColor = Color.Transparent;
-            panel4.Parent = capturedImageBox;
-            panel4.BackColor = Color.Transparent;
-            panel6.Parent = capturedImageBox;
-            panel6.BackColor = Color.Transparent;*/
+            metroComboBox2.Enabled ^= true;
+            metroComboBox1.Enabled ^= true;
         }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            //if (metroPanel1.BorderStyle == BorderStyle.FixedSingle)
-            //{
-            //    int thickness = 3;//it's up to you
-            //    int halfThickness = thickness / 2;
-            //    using (Pen p = new Pen(Color.Black, thickness))
-            //    {
-            //        e.Graphics.DrawRectangle(p, new Rectangle(halfThickness,
-            //                                                  halfThickness,
-            //                                                  metroPanel1.ClientSize.Width - thickness,
-            //                                                  metroPanel1.ClientSize.Height - thickness));
-            //    }
-            //}
-        }
-
-        private void metroToggle1_CheckedChanged(object sender, EventArgs e)
-        {
-            panel1.Visible ^= true;
-            panel2.Visible ^= true;
-            panel3.Visible ^= true;
-            panel4.Visible ^= true;
-            panel5.Visible ^= true;
-            panel6.Visible ^= true;
-            panel7.Visible ^= true;
-            panel8.Visible ^= true;
-            panel9.Visible ^= true;
-            panel10.Visible ^= true;
-            panel11.Visible ^= true;
-            panel12.Visible ^= true;
-            panel13.Visible ^= true;
-            panel14.Visible ^= true;
-            panel15.Visible ^= true;
-            panel16.Visible ^= true;
-            panel17.Visible ^= true;
-            panel18.Visible ^= true;
-            panel19.Visible ^= true;
-            panel20.Visible ^= true;
-            panel21.Visible ^= true;
-            panel22.Visible ^= true;
-            panel23.Visible ^= true;
-            panel24.Visible ^= true;
-            panel25.Visible ^= true;
-            panel26.Visible ^= true;
-            panel27.Visible ^= true;
-            panel28.Visible ^= true;
-            panel29.Visible ^= true;
-            panel30.Visible ^= true;
-        }
-
-        
     }
 }
