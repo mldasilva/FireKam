@@ -27,8 +27,6 @@ using iTextSharp.text.pdf;
 
 using System.Windows.Forms.DataVisualization.Charting;
 using MetroFramework.Forms;
-using MongoDB.Bson;
-using System.Timers;
 
 namespace MotionDetection
 {
@@ -37,30 +35,21 @@ namespace MotionDetection
       private Capture _capture;
       private MotionHistory _motionHistory;
       private BackgroundSubtractor _forgroundDetector;
-      private bool checkTimer;
 
       public FireKAM()
       {
-            InitializeComponent();
-            checkTimer = true;
-            timer.Start();
-            this.StyleManager = msmMain;
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 200);
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 33);
-            //this.chart1.Series["Camera"].Points.AddXY("Max", 33);
-            chart1.Series["Camera"].XValueType = ChartValueType.DateTime;
-            System.DateTime x = DateTime.Now;
-            chart1.Series[0].Points.AddXY(x.ToOADate(),34);
-
-            
-
-            //try to create the capture
-            if (_capture == null)
+         InitializeComponent();
+         this.StyleManager = msmMain;
+         this.chart1.Series["Series1"].Points.AddXY("Max", 33);
+         this.chart1.Series["Series1"].Points.AddXY("Max", 33);
+         this.chart1.Series["Series1"].Points.AddXY("Max", 33);
+         //try to create the capture
+         if (_capture == null)
          {
             try
             {
-                //"..\\..\\videoplayback480p.mp4"
-                _capture = new Capture("..\\..\\videoplayback480p.mp4");
+                //"C:\\Users\\Kevin Li\\Desktop\\Systems-Project_FireKam\\MotionDetection\\media\\videoplayback480p.mp4"
+                _capture = new Capture();
             }
             catch (NullReferenceException excpt)
             {   //show errors if there is any
@@ -82,113 +71,97 @@ namespace MotionDetection
 
       private Mat _segMask = new Mat();
       private Mat _forgroundMask = new Mat();
-      private async void ProcessFrame(object sender, EventArgs e)
+      private void ProcessFrame(object sender, EventArgs e)
       {
-            Mat image = new Mat();
+         Mat image = new Mat();
 
-            _capture.Retrieve(image);
-            if (_forgroundDetector == null)
-            {
-                _forgroundDetector = new BackgroundSubtractorMOG2();
-            }
+         _capture.Retrieve(image);
+         if (_forgroundDetector == null)
+         {
+            _forgroundDetector = new BackgroundSubtractorMOG2();
+         }
 
-            _forgroundDetector.Apply(image, _forgroundMask);
+         _forgroundDetector.Apply(image, _forgroundMask);
 
-            //update the motion history
-            _motionHistory.Update(_forgroundMask);         
+         //update the motion history
+         _motionHistory.Update(_forgroundMask);         
 
-            #region get a copy of the motion mask and enhance its color
-            double[] minValues, maxValues;
-            Point[] minLoc, maxLoc;
-            _motionHistory.Mask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
-            Mat motionMask = new Mat();
-            using (ScalarArray sa = new ScalarArray(255.0 / maxValues[0]))
+         #region get a copy of the motion mask and enhance its color
+         double[] minValues, maxValues;
+         Point[] minLoc, maxLoc;
+         _motionHistory.Mask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
+         Mat motionMask = new Mat();
+         using (ScalarArray sa = new ScalarArray(255.0 / maxValues[0]))
             CvInvoke.Multiply(_motionHistory.Mask, sa, motionMask, 1, DepthType.Cv8U);
-            //Image<Gray, Byte> motionMask = _motionHistory.Mask.Mul(255.0 / maxValues[0]);
-            #endregion
+         //Image<Gray, Byte> motionMask = _motionHistory.Mask.Mul(255.0 / maxValues[0]);
+         #endregion
 
-            //create the motion image 
-            Mat motionImage = new Mat(motionMask.Size.Height, motionMask.Size.Width, DepthType.Cv8U, 3);
-            //display the motion pixels in blue (first channel)
-            //motionImage[0] = motionMask;
-            CvInvoke.InsertChannel(motionMask, motionImage, 0);
+         //create the motion image 
+         Mat motionImage = new Mat(motionMask.Size.Height, motionMask.Size.Width, DepthType.Cv8U, 3);
+         //display the motion pixels in blue (first channel)
+         //motionImage[0] = motionMask;
+         CvInvoke.InsertChannel(motionMask, motionImage, 0);
 
-            //Threshold to define a motion area, reduce the value to detect smaller motion
-            double minArea = 1000;
+         //Threshold to define a motion area, reduce the value to detect smaller motion
+         double minArea = 1000;
 
             //storage.Clear(); //clear the storage
             System.Drawing.Rectangle[] rects;
-            using (VectorOfRect boundingRect = new VectorOfRect())
-            {
-                _motionHistory.GetMotionComponents(_segMask, boundingRect);
-                rects = boundingRect.ToArray();
-            }
+         using (VectorOfRect boundingRect = new VectorOfRect())
+         {
+            _motionHistory.GetMotionComponents(_segMask, boundingRect);
+            rects = boundingRect.ToArray();
+         }
 
             int motionCount = 0;
-            //iterate through each of the motion component
-            foreach (System.Drawing.Rectangle comp in rects)
-            {
-                int area = comp.Width * comp.Height;
-                //reject the components that have small area;
-                if (area < minArea) continue;
+         //iterate through each of the motion component
+         foreach (System.Drawing.Rectangle comp in rects)
+         {
+            int area = comp.Width * comp.Height;
+            //reject the components that have small area;
+            if (area < minArea) continue;
 
-                // find the angle and motion pixel count of the specific area
-                double angle, motionPixelCount;
-                _motionHistory.MotionInfo(_forgroundMask, comp, out angle, out motionPixelCount);
+            // find the angle and motion pixel count of the specific area
+            double angle, motionPixelCount;
+            _motionHistory.MotionInfo(_forgroundMask, comp, out angle, out motionPixelCount);
 
-                //reject the area that contains too few motion
-                if (motionPixelCount < area * 0.05) continue;
+            //reject the area that contains too few motion
+            if (motionPixelCount < area * 0.05) continue;
 
-                //Draw each individual motion in red
-                DrawMotion(motionImage, comp, angle, new Bgr(Color.Red));
-                motionCount++;
-            }
+            //Draw each individual motion in red
+            DrawMotion(motionImage, comp, angle, new Bgr(Color.Red));
+            motionCount++;
+         }
 
-            // find and draw the overall motion angle
-            double overallAngle, overallMotionPixelCount;
-         
-            _motionHistory.MotionInfo(_forgroundMask, new System.Drawing.Rectangle(Point.Empty, motionMask.Size), out overallAngle, out overallMotionPixelCount);
-            DrawMotion(motionImage, new System.Drawing.Rectangle(Point.Empty, motionMask.Size), overallAngle, new Bgr(Color.Green));
+         // find and draw the overall motion angle
+         double overallAngle, overallMotionPixelCount;
 
-            if (this.Disposing || this.IsDisposed)
-            { 
-                return;
-            }
+         _motionHistory.MotionInfo(_forgroundMask, new System.Drawing.Rectangle(Point.Empty, motionMask.Size), out overallAngle, out overallMotionPixelCount);
+         DrawMotion(motionImage, new System.Drawing.Rectangle(Point.Empty, motionMask.Size), overallAngle, new Bgr(Color.Green));
 
-            //find pedestrian
-            bool tryUseCuda = true;
-            bool tryuseOpenCL = false;
-            long processingTime;
+         if (this.Disposing || this.IsDisposed)
+         { 
+            return;
+         }
+            
+        //find pedestrian
+        bool tryUseCuda = true;
+        bool tryuseOpenCL = false;
+        long processingTime;
             System.Drawing.Rectangle[] pedestrianRestult = FindPedestrian.Find(image, tryUseCuda, tryuseOpenCL, out processingTime);
-            foreach (System.Drawing.Rectangle rect in pedestrianRestult)
-            {
+        foreach(System.Drawing.Rectangle rect in pedestrianRestult)
+        {
                 CvInvoke.Rectangle(image, rect, new Bgr(Color.Gold).MCvScalar);
-            }
+        }
 
-            capturedImageBox.Image = image;
-            //forgroundImageBox.Image = _forgroundMask;
+         capturedImageBox.Image = image;
+         //forgroundImageBox.Image = _forgroundMask;
 
-            //Display the amount of motions found on the current image
-            UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionCount, overallMotionPixelCount));
-
-            //write into db
-            if (checkTimer)
-            {          
-                var document = new BsonDocument
-                {
-                    {"Camera", "Camera1"},
-                    {"Time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
-                    {"MotionCout", motionCount }
-                };
-                await DataAccess.Insert(document);
-            }
-
-            //test string
-            //string a = await DataAccess.FindByTime("2016-02-22 03:00:00", "2016-02-28 02:00:00");
-
-            motionCount = 0;
-            //Display the image of the motion
-            motionImageBox.Image = motionImage;
+         //Display the amount of motions found on the current image
+         UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionCount, overallMotionPixelCount));
+         motionCount = 0;
+         //Display the image of the motion
+         motionImageBox.Image = motionImage;
 
       }
 
@@ -287,17 +260,6 @@ namespace MotionDetection
             doc.Close();
         }
 
-        //timer for record data
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            if (checkTimer)
-            {
-                checkTimer = false;
-            }
-            else
-            {
-                checkTimer = true;
-            }
-        }
+       
     }
 }
