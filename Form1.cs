@@ -24,6 +24,8 @@ using System.Windows.Forms.DataVisualization.Charting;
 using MetroFramework.Forms;
 using MongoDB.Bson;
 using System.Timers;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 
 namespace MotionDetection
 {
@@ -46,6 +48,7 @@ namespace MotionDetection
             chart1.Series["Camera"].XValueType = ChartValueType.Auto;
             chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
             pHeatmap = new Heatmap();
+            pictureBox3.Parent = capturedImageBox;
 
             //try to create the capture
             if (_capture == null)
@@ -53,7 +56,7 @@ namespace MotionDetection
                 try
                 {
                     //"..\\..\\videoplayback480p.mp4"
-                    _capture = new Capture("..\\..\\videoplayback480p.mp4");
+                    _capture = new Capture("..\\..\\videoplayback720p.mp4");
                 }
                 catch (NullReferenceException excpt)
                 {   //show errors if there is any
@@ -147,6 +150,7 @@ namespace MotionDetection
             //Image<Gray, Byte> normalizedMasterImage = new Image<Gray, Byte>(b);
             //motionImage = normalizedMasterImage.Mat;
             pictureBox3.BackgroundImage = b;
+            
 
             // find and draw the overall motion angle
             double overallAngle, overallMotionPixelCount;
@@ -193,7 +197,7 @@ namespace MotionDetection
 
       }
 
-      private void UpdateText(String text)
+        private void UpdateText(String text)
       {
          if (!IsDisposed && !Disposing && InvokeRequired)
          {

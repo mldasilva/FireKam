@@ -28,8 +28,10 @@ namespace MotionDetection
     public partial class Heatmap 
     {
         public List<HeatPoint> heatPoints = new List<HeatPoint>();
-        Bitmap bMap = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+        //Bitmap bMap = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
         Bitmap bImg = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+
+        Bitmap bMap = new Bitmap("..\\..\\media\\test.jpg");
         private BackgroundWorker worker = new BackgroundWorker();
 
         public Heatmap()
@@ -61,7 +63,6 @@ namespace MotionDetection
 
             // Set background color to white so that pixels can be correctly colorized
             DrawSurface.Clear(Color.White);
-
             // Traverse heat point data and draw masks for each heat point
             foreach (HeatPoint DataPoint in aHeatPoints)
             {
@@ -139,7 +140,7 @@ namespace MotionDetection
             return (radians);
         }
 
-        public static Bitmap Colorize(Bitmap Mask, byte Alpha)
+        public Bitmap Colorize(Bitmap Mask, byte Alpha)
         {
             // Create new bitmap to act as a work surface for the colorization process
             Bitmap Output = new Bitmap(Mask.Width, Mask.Height, PixelFormat.Format32bppArgb);
@@ -164,7 +165,7 @@ namespace MotionDetection
             return Output;
         }
 
-        private static ColorMap[] CreatePaletteIndex(byte Alpha)
+        private ColorMap[] CreatePaletteIndex(byte Alpha)
         {
             ColorMap[] OutputMap = new ColorMap[256];
 
@@ -188,13 +189,34 @@ namespace MotionDetection
             //heatPoints.Add(new HeatPoint(nSample.X, nSample.Y, 64));
             bMap = CreateIntensityMask(bMap, heatPoints);
             bImg = Colorize(bMap, 255);
-            //heatPoints.Clear();
-            return bImg;
+            
+            return this.SetOpacity(bImg, 0.8f);
         }
 
-        public void UpdatePanel()
+        private Image SetOpacity(Image image, float opacity)
         {
-            CreateHeatmap();
+            var colorMatrix = new ColorMatrix();
+            colorMatrix.Matrix33 = opacity;
+            var imageAttributes = new ImageAttributes();
+            imageAttributes.SetColorMatrix(
+                colorMatrix,
+                ColorMatrixFlag.Default,
+                ColorAdjustType.Bitmap);
+            var output = new Bitmap(image.Width, image.Height);
+            using (var gfx = Graphics.FromImage(output))
+            {
+                gfx.SmoothingMode = SmoothingMode.AntiAlias;
+                gfx.DrawImage(
+                    image,
+                    new Rectangle(0, 0, image.Width, image.Height),
+                    0,
+                    0,
+                    image.Width,
+                    image.Height,
+                    GraphicsUnit.Pixel,
+                    imageAttributes);
+            }
+            return output;
         }
     }
 }
