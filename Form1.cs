@@ -36,9 +36,9 @@ namespace MotionDetection
         private BackgroundSubtractor _forgroundDetector;
         private bool checkTimer;
         Heatmap pHeatmap;
-        Panel[] Panels = new Panel[256];
-        private int k = 0;
-        private int panelNum = 30;
+        Panel[] Panels = new Panel[36];
+        private int panelNum = 36;
+        private string videoSource = "..\\..\\videoplayback720p.mp4";
 
         public FireKAM()
         {
@@ -50,33 +50,62 @@ namespace MotionDetection
             chart1.Series["Camera"].XValueType = ChartValueType.Auto;
             chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
             pHeatmap = new Heatmap();
-            //pictureBox3.Parent = capturedImageBox;
+            pictureBox3.Parent = motionImageBox;          
+        }
 
+        private void recordToggle_CheckedChanged(object sender, EventArgs e)
+        {
             //try to create the capture
+            if (recordToggle.Checked)
+            {
+                if (_capture == null)
+                {
+                    StartCapture();
+                }
+                else
+                {
+                    _capture.Start();
+                }
+            }
+            else
+            {
+                _capture.Pause();
+            }
+        }
+
+        private void StartCapture()
+        {
             if (_capture == null)
             {
                 try
-                {
-                    //"..\\..\\videoplayback480p.mp4"
-                    _capture = new Capture("..\\..\\videoplayback720p.mp4");
+                {                   
+                    if (SourceComboBox.SelectedIndex == 0)
+                    {                       
+                        _capture = new Capture();
+                    }
+                    else if (SourceComboBox.SelectedIndex == 1)
+                    {
+                        //"..\\..\\videoplayback480p.mp4"
+                        _capture = new Capture(videoSource);
+                    }
                 }
                 catch (NullReferenceException excpt)
                 {   //show errors if there is any
                     MessageBox.Show(excpt.Message);
                 }
-                }
+            }
 
-         if (_capture != null) //if camera capture has been successfully created
-         {
-            _motionHistory = new MotionHistory(
-                1.0, //in second, the duration of motion history you wants to keep
-                0.05, //in second, maxDelta for cvCalcMotionGradient
-                0.5); //in second, minDelta for cvCalcMotionGradient
+            if (_capture != null) //if camera capture has been successfully created
+            {
+                _motionHistory = new MotionHistory(
+                    1.0, //in second, the duration of motion history you wants to keep 1.0
+                    0.05, //in second, maxDelta for cvCalcMotionGradient 0.05
+                    0.5); //in second, minDelta for cvCalcMotionGradient 0.5
 
-            _capture.ImageGrabbed += ProcessFrame;
-            _capture.Start();
-         }
-      }
+                _capture.ImageGrabbed += ProcessFrame;
+                _capture.Start();
+            }
+        }
 
         private Mat _segMask = new Mat();
         private Mat _forgroundMask = new Mat();
@@ -85,7 +114,6 @@ namespace MotionDetection
         private async void ProcessFrame(object sender, EventArgs e)
         {
             Mat image = new Mat();
-
             _capture.Retrieve(image);
             if (_forgroundDetector == null)
             {
@@ -95,7 +123,7 @@ namespace MotionDetection
             _forgroundDetector.Apply(image, _forgroundMask);
 
             //update the motion history
-            _motionHistory.Update(_forgroundMask);         
+            _motionHistory.Update(_forgroundMask);
 
             #region get a copy of the motion mask and enhance its color
             double[] minValues, maxValues;
@@ -103,7 +131,7 @@ namespace MotionDetection
             _motionHistory.Mask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
             Mat motionMask = new Mat();
             using (ScalarArray sa = new ScalarArray(255.0 / maxValues[0]))
-            CvInvoke.Multiply(_motionHistory.Mask, sa, motionMask, 1, DepthType.Cv8U);
+                CvInvoke.Multiply(_motionHistory.Mask, sa, motionMask, 1, DepthType.Cv8U);
             //Image<Gray, Byte> motionMask = _motionHistory.Mask.Mul(255.0 / maxValues[0]);
             #endregion
 
@@ -114,7 +142,7 @@ namespace MotionDetection
             CvInvoke.InsertChannel(motionMask, motionImage, 0);
 
             //Threshold to define a motion area, reduce the value to detect smaller motion
-            double minArea = 1000;
+            double minArea = 5000;
 
             //storage.Clear(); //clear the storage
             System.Drawing.Rectangle[] rects;
@@ -127,20 +155,26 @@ namespace MotionDetection
             int motionCount = 0;
             //iterate through each of the motion component
             foreach (System.Drawing.Rectangle comp in rects)
-            {              
+            {
                 int area = comp.Width * comp.Height;
+
                 //reject the components that have small area;
                 if (area < minArea) continue;
 
+                if (!CheckArea(comp)) continue;
+
+                //find center point
+                Point center = new Point(comp.X + (comp.Width >> 1), comp.Y + (comp.Height >> 1));
+
                 //create heatmap
-                myHeatMap.heatPoints.Add(new HeatPoint(comp.X, comp.Y, 32));
+                myHeatMap.heatPoints.Add(new HeatPoint(center.X, center.Y, 16));
 
                 // find the angle and motion pixel count of the specific area
                 double angle, motionPixelCount;
                 _motionHistory.MotionInfo(_forgroundMask, comp, out angle, out motionPixelCount);
 
-                //reject the area that contains too few motion
-                if (motionPixelCount < area * 0.05) continue;
+                //reject the area that contains too few motion 0.05
+                if (motionPixelCount < area * 0.1) continue;
 
                 //Draw each individual motion in red
                 DrawMotion(motionImage, comp, angle, new Bgr(Color.Red));
@@ -152,28 +186,28 @@ namespace MotionDetection
             //Image<Gray, Byte> normalizedMasterImage = new Image<Gray, Byte>(b);
             //motionImage = normalizedMasterImage.Mat;
             pictureBox3.BackgroundImage = b;
-            
+
 
             // find and draw the overall motion angle
             double overallAngle, overallMotionPixelCount;
-         
+
             _motionHistory.MotionInfo(_forgroundMask, new System.Drawing.Rectangle(Point.Empty, motionMask.Size), out overallAngle, out overallMotionPixelCount);
             DrawMotion(motionImage, new System.Drawing.Rectangle(Point.Empty, motionMask.Size), overallAngle, new Bgr(Color.Green));
 
             if (this.Disposing || this.IsDisposed)
-            { 
+            {
                 return;
             }
 
             //find pedestrian
-            bool tryUseCuda = true;
-            bool tryuseOpenCL = false;
-            long processingTime;
-            System.Drawing.Rectangle[] pedestrianRestult = FindPedestrian.Find(image, tryUseCuda, tryuseOpenCL, out processingTime);
-            foreach (System.Drawing.Rectangle rect in pedestrianRestult)
-            {
-                CvInvoke.Rectangle(image, rect, new Bgr(Color.Gold).MCvScalar);
-            }
+            //bool tryUseCuda = true;
+            //bool tryuseOpenCL = false;
+            //long processingTime;
+            //System.Drawing.Rectangle[] pedestrianRestult = FindPedestrian.Find(image, tryUseCuda, tryuseOpenCL, out processingTime);
+            //foreach (System.Drawing.Rectangle rect in pedestrianRestult)
+            //{
+            //    CvInvoke.Rectangle(image, rect, new Bgr(Color.Gold).MCvScalar);
+            //}
 
             capturedImageBox.Image = image;
             //forgroundImageBox.Image = _forgroundMask;
@@ -181,9 +215,9 @@ namespace MotionDetection
             //Display the amount of motions found on the current image
             UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionCount, overallMotionPixelCount));
 
-            //write into db
+            ////write into db
             if (checkTimer)
-            {          
+            {
                 var document = new BsonDocument
                 {
                     {"Camera", "Camera1"},
@@ -195,9 +229,26 @@ namespace MotionDetection
 
             motionCount = 0;
             //Display the image of the motion
-            motionImageBox.Image = motionImage;
-
+            motionImageBox.Image = motionImage;         
       }
+
+        private bool CheckArea(System.Drawing.Rectangle rect)
+        {
+            //area code: 1 2 3 4 5 6 || 7 8 9 10 11 12 ||...||...||..36
+            //y*6+x = area code
+            int x = rect.X / (capturedImageBox.Width / 6);
+            int y = rect.Y / (capturedImageBox.Height / 6);
+            int area = y * 6 + x;
+
+            for (int i = 0; i < panelNum; i++)
+            {
+                if (Panels[i].BackColor == Color.Transparent && area == i)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         private void UpdateText(String text)
       {
@@ -229,7 +280,6 @@ namespace MotionDetection
          //LineSegment2D line = new LineSegment2D(center, pointOnCircle);
          //CvInvoke.Circle(image, Point.Round(circle.Center), (int)circle.Radius, color.MCvScalar);
          //CvInvoke.Line(image, line.P1, line.P2, color.MCvScalar);
-
       }
 
       /// <summary>
@@ -249,54 +299,15 @@ namespace MotionDetection
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _capture.Stop();
-        }
-
-        private void pedestianToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PedestrianPanel.Visible = true;
-            MotionPanel.Visible = false;
-        }
-
-        private void motionDetectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PedestrianPanel.Visible = false;
-            MotionPanel.Visible = true;
-            MotionPanel.Location = new Point(12, 52);
-        }
-
-        private void bothToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MotionPanel.Visible = true;
-            PedestrianPanel.Visible = true;
-        }
-
-       
+            if (_capture != null)
+            {
+                _capture.Stop();
+            }
+        }     
 
         private void FireKAM_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < 120; i++)
-            {
-                if (i == 6 || i == 12 || i == 18 || i == 24)
-                {
-                    k++;
-                }
-
-                Panels[i] = new Panel();
-
-                Panels[i].BackColor = Color.Transparent;
-                Panels[i].Location = new Point(0 + (115 * (i - (k * 6))), 3 + (100 * k));
-
-                Panels[i].Click += new EventHandler(paneli_Click);
-
-                Panels[i].Size = new Size(115, 100);
-                //Panels[i].Size = new Size(capturedImageBox.Width / 6, capturedImageBox.Height/5);
-                Panels[i].Visible = false;
-
-                Panels[i].BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-                capturedImageBox.Controls.Add(Panels[i]);
-
-            }
+            GeneratePanel();
 
             metroComboBox2.Items.Insert(0, "160");
             metroComboBox2.Items.Add("200");
@@ -335,6 +346,7 @@ namespace MotionDetection
             }
 
             for (int i = 0; i < panelNum; i++)
+            {
                 if (sender == Panels[i])
                 {
                     if (Panels[i].BackColor == Color.FromArgb(Convert.ToInt32(metroComboBox2.Text), customColor))
@@ -346,15 +358,48 @@ namespace MotionDetection
                         Panels[i].BackColor = Color.FromArgb(Convert.ToInt32(metroComboBox2.Text), customColor);
                     }
                 }
-
+            }
         }
+
+        private void GeneratePanel()
+        {
+            Array.Clear(Panels, 0, Panels.Length);
+            int k = 0;
+            int j = 0;
+
+            for (int i = 0; i < 36; i++)
+            {
+                if (i == 6 || i == 12 || i == 18 || i == 24 || i == 30 || i == 36)
+                {
+                    k++;
+                    j = 0;
+                }
+
+                Panels[i] = new Panel();
+
+                Panels[i].BackColor = Color.Transparent;
+                //Panels[i].Location = new Point(0 + (115 * (i - (k * 6))), 3 + (100 * k));
+                Panels[i].Location = new Point(capturedImageBox.Location.X + (capturedImageBox.Width / 6 * j),
+                                               capturedImageBox.Location.Y + (capturedImageBox.Height / 6 * k));
+
+                Panels[i].Click += new EventHandler(paneli_Click);
+
+                Panels[i].Size = new Size(capturedImageBox.Width / 6, capturedImageBox.Height / 6);
+                //Panels[i].Size = new Size(capturedImageBox.Width / 6, capturedImageBox.Height/5);
+                Panels[i].Visible = false;
+
+                Panels[i].BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                capturedImageBox.Controls.Add(Panels[i]);
+                j++;
+            }
+        }
+
         private void ToPDF_Click(object sender, EventArgs e)
         {
             msmMain.Theme = MetroFramework.MetroThemeStyle.Dark;
             Document doc = new Document(iTextSharp.text.PageSize.LETTER, 10, 10, 42, 35);
             PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream("Test.pdf", FileMode.Create));
             doc.Open();
-
 
             var chartimage = new MemoryStream();
             chart1.SaveImage(chartimage, ChartImageFormat.Png);
@@ -503,48 +548,47 @@ namespace MotionDetection
             }
         }
 
-        public Bitmap[] splitBitmap()
-        {
-            OpenFileDialog openDialog = new OpenFileDialog();
-            System.Drawing.Bitmap original;
-            System.Drawing.Bitmap temp;
-            if (openDialog.ShowDialog() == DialogResult.OK)
-            {
-                original = new Bitmap(openDialog.FileName);
-            }
-            else
-            {
-                original = new Bitmap("FireKamlogo2.ico");
-            }
-            System.Drawing.Rectangle image1Rect = new System.Drawing.Rectangle(0,0, original.Width/3,original.Height/3);
-            System.Drawing.Rectangle image2Rect = new System.Drawing.Rectangle();
-            System.Drawing.Rectangle image3Rect = new System.Drawing.Rectangle();
-            System.Drawing.Rectangle image4Rect = new System.Drawing.Rectangle();
-            System.Drawing.Rectangle image5Rect = new System.Drawing.Rectangle();
-            System.Drawing.Rectangle image6Rect = new System.Drawing.Rectangle();
-            System.Drawing.Rectangle image7Rect = new System.Drawing.Rectangle();
-            System.Drawing.Rectangle image8Rect = new System.Drawing.Rectangle();
-            System.Drawing.Rectangle image9Rect = new System.Drawing.Rectangle();
-
-            Bitmap[] imgs = new Bitmap[9];
-            imgs[0] = original.Clone(image1Rect, original.PixelFormat);
-            //assign imgs[0] to buttom background
-            return imgs;
-        }
-
-        private void metroButton1_Click(object sender, EventArgs e)
-        {
-            splitBitmap();
-        }
-
         private void metroToggle1_CheckedChanged_1(object sender, EventArgs e)
-        {
-            for (int i = 0; i < 30; i++)
+        {     
+            if (metroToggle1.Checked == true)
             {
-                Panels[i].Visible ^= true;
+                for (int i = 0; i < 36; i++)
+                {
+                    Panels[i].Visible = true;
+                }
+                metroComboBox2.Enabled = true;
+                metroComboBox1.Enabled = true;
             }
-            metroComboBox2.Enabled ^= true;
-            metroComboBox1.Enabled ^= true;
+            else if(metroToggle1.Checked == false)
+            {
+                for (int i = 0; i < 36; i++)
+                {
+                    Panels[i].Visible = false;
+                }
+                metroComboBox2.Enabled = false;
+                metroComboBox1.Enabled = false;
+            }
+        }
+
+        private void SourceComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(SourceComboBox.SelectedIndex == 0)
+            {
+
+            }
+            else if (SourceComboBox.SelectedIndex == 1)
+            {
+                OpenFileDialog choofdlog = new OpenFileDialog();
+                choofdlog.Filter = "All Videos Files |*.dat; *.wmv; *.3g2; *.3gp; *.3gp2; *.3gpp; *.amv; *.asf;  *.avi; *.bin; *.cue; *.divx; *.dv; *.flv; *.gxf; *.iso; *.m1v; *.m2v; *.m2t; *.m2ts; *.m4v; " +
+                  " *.mkv; *.mov; *.mp2; *.mp2v; *.mp4; *.mp4v; *.mpa; *.mpe; *.mpeg; *.mpeg1; *.mpeg2; *.mpeg4; *.mpg; *.mpv2; *.mts; *.nsv; *.nuv; *.ogg; *.ogm; *.ogv; *.ogx; *.ps; *.rec; *.rm; *.rmvb; *.tod; *.ts; *.tts; *.vob; *.vro; *.webm";
+                choofdlog.FilterIndex = 1;
+                choofdlog.Multiselect = false;
+
+                if (choofdlog.ShowDialog() == DialogResult.OK)
+                {
+                    videoSource = choofdlog.FileName;        
+                }
+            }
         }
     }
 }
