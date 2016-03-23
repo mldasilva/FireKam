@@ -43,7 +43,6 @@ namespace MotionDetection
         {
             float max = float.NegativeInfinity;
 
-
             for (int i = 0; i < a.GetLength(0); i++)
             {
                 for (int j = 0; j < a.GetLength(1); j++)
@@ -63,6 +62,7 @@ namespace MotionDetection
 
             // Set background color to white so that pixels can be correctly colorized
             DrawSurface.Clear(Color.White);
+
             // Traverse heat point data and draw masks for each heat point
             foreach (HeatPoint DataPoint in aHeatPoints)
             {
@@ -190,7 +190,7 @@ namespace MotionDetection
             bMap = CreateIntensityMask(bMap, heatPoints);
             bImg = Colorize(bMap, 255);
             
-            return this.SetOpacity(bImg, 0.8f);
+            return this.SetOpacity(bImg, 0.7f);
         }
 
         private Image SetOpacity(Image image, float opacity)
