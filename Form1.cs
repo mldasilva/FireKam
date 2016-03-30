@@ -320,9 +320,7 @@ namespace MotionDetection
             metroComboBox1.Items.Add("Blue");
             metroComboBox1.SelectedIndex = 0;
 
-            metroComboBox3.Items.Insert(0, "30");
-            metroComboBox3.Items.Add("120");
-            metroComboBox3.SelectedIndex = 0;
+            
 
             metroComboBox2.Enabled = false;
             metroComboBox1.Enabled = false;
@@ -379,12 +377,15 @@ namespace MotionDetection
 
                 Panels[i].BackColor = Color.Transparent;
                 //Panels[i].Location = new Point(0 + (115 * (i - (k * 6))), 3 + (100 * k));
-                Panels[i].Location = new Point(capturedImageBox.Location.X + (capturedImageBox.Width / 6 * j),
-                                               capturedImageBox.Location.Y + (capturedImageBox.Height / 6 * k));
+
+                Panels[i].Location = new Point((((capturedImageBox.Width/6)) * (i - (k * 6))),((capturedImageBox.Height/6) * k));
+
+                //Panels[i].Location = new Point(capturedImageBox.Location.X + (capturedImageBox.Width / 6 * j),
+                                               //capturedImageBox.Location.Y + (capturedImageBox.Height / 6 * k));
 
                 Panels[i].Click += new EventHandler(paneli_Click);
 
-                Panels[i].Size = new Size(capturedImageBox.Width / 6, capturedImageBox.Height / 6);
+                Panels[i].Size = new Size((capturedImageBox.Width / 6)+5, (capturedImageBox.Height / 6)+3);
                 //Panels[i].Size = new Size(capturedImageBox.Width / 6, capturedImageBox.Height/5);
                 Panels[i].Visible = false;
 
@@ -589,6 +590,11 @@ namespace MotionDetection
                     videoSource = choofdlog.FileName;        
                 }
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
