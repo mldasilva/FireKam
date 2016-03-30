@@ -26,6 +26,7 @@ using MongoDB.Bson;
 using System.Timers;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Collections.Generic;
 
 namespace MotionDetection
 {
@@ -38,6 +39,7 @@ namespace MotionDetection
         Heatmap pHeatmap;
         Panel[] Panels = new Panel[36];
         private int panelNum = 36;
+        //"..\\..\\videoplayback480p.mp4"
         private string videoSource = "..\\..\\videoplayback720p.mp4";
 
         public FireKAM()
@@ -45,12 +47,38 @@ namespace MotionDetection
             InitializeComponent();
             checkTimer = true;
             timer.Start();
-            this.StyleManager = msmMain;
-            ReportTypeCB.SelectedIndex = 0;
+            this.StyleManager = msmMain;          
             chart1.Series["Camera"].XValueType = ChartValueType.Auto;
             chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
             pHeatmap = new Heatmap();
-            pictureBox3.Parent = motionImageBox;          
+            pictureBox3.Parent = motionImageBox;         
+        }
+
+        private void FireKAM_Load(object sender, EventArgs e)
+        {
+            GeneratePanel();
+
+            ReportTypeCB.SelectedIndex = 0;
+            SourceComboBox.SelectedIndex = 0;
+            ReportSourceDropdown.SelectedIndex = 0;
+
+            metroComboBox2.Items.Insert(0, "160");
+            metroComboBox2.Items.Add("200");
+            metroComboBox2.Items.Add("240");
+            metroComboBox2.Items.Add("255");
+            metroComboBox2.SelectedIndex = 0;
+
+            metroComboBox1.Items.Insert(0, "Black");
+            metroComboBox1.Items.Add("Red");
+            metroComboBox1.Items.Add("Blue");
+            metroComboBox1.SelectedIndex = 0;
+
+            metroComboBox3.Items.Insert(0, "30");
+            metroComboBox3.Items.Add("120");
+            metroComboBox3.SelectedIndex = 0;
+
+            metroComboBox2.Enabled = false;
+            metroComboBox1.Enabled = false;
         }
 
         private void recordToggle_CheckedChanged(object sender, EventArgs e)
@@ -78,14 +106,13 @@ namespace MotionDetection
             if (_capture == null)
             {
                 try
-                {                   
+                {
                     if (SourceComboBox.SelectedIndex == 0)
                     {                       
                         _capture = new Capture();
                     }
                     else if (SourceComboBox.SelectedIndex == 1)
                     {
-                        //"..\\..\\videoplayback480p.mp4"
                         _capture = new Capture(videoSource);
                     }
                 }
@@ -113,6 +140,7 @@ namespace MotionDetection
 
         private async void ProcessFrame(object sender, EventArgs e)
         {
+            List<BsonDocument> tempList = new List<BsonDocument>();
             Mat image = new Mat();
             _capture.Retrieve(image);
             if (_forgroundDetector == null)
@@ -166,6 +194,18 @@ namespace MotionDetection
                 //find center point
                 Point center = new Point(comp.X + (comp.Width >> 1), comp.Y + (comp.Height >> 1));
 
+                //insert to temp motion list
+                var document = new BsonDocument
+                {
+                    {"Source", Path.GetFileName(videoSource)},
+                    {"Time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
+                    {"Area", GetAreaCode(center).ToString()},
+                    {"AreaX", center.X.ToString()},
+                    {"AreaY", center.Y.ToString()},
+                    {"MotionCout", 1 }
+                };
+                tempList.Add(document);
+
                 //create heatmap
                 myHeatMap.heatPoints.Add(new HeatPoint(center.X, center.Y, 16));
 
@@ -215,22 +255,30 @@ namespace MotionDetection
             //Display the amount of motions found on the current image
             UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", motionCount, overallMotionPixelCount));
 
-            ////write into db
+            //write into db
             if (checkTimer)
             {
-                var document = new BsonDocument
+                foreach(var doc in tempList)
                 {
-                    {"Camera", "Camera1"},
-                    {"Time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
-                    {"MotionCout", motionCount }
-                };
-                await DataAccess.Insert(document);
+                    await DataAccess.Insert(doc);
+                }             
             }
 
             motionCount = 0;
             //Display the image of the motion
             motionImageBox.Image = motionImage;         
       }
+
+        private int GetAreaCode(Point rect)
+        {
+            //area code: 1 2 3 4 5 6 || 7 8 9 10 11 12 ||...||...||..36
+            //y*6+x = area code
+            int x = rect.X / (capturedImageBox.Width / 6);
+            int y = rect.Y / (capturedImageBox.Height / 6);
+            int area = y * 6 + x;
+
+            return area;
+        }
 
         private bool CheckArea(System.Drawing.Rectangle rect)
         {
@@ -251,16 +299,16 @@ namespace MotionDetection
         }
 
         private void UpdateText(String text)
-      {
-         if (!IsDisposed && !Disposing && InvokeRequired)
-         {
-            Invoke((Action<String>)UpdateText, text);
-         }
-         else
-         {
-            label3.Text = text;
-         }
-      }
+        {
+            if (!IsDisposed && !Disposing && InvokeRequired)
+            {
+                Invoke((Action<String>)UpdateText, text);
+            }
+            else
+            {
+                label3.Text = text;
+            }
+        }
 
       private static void DrawMotion(IInputOutputArray image, System.Drawing.Rectangle motionRegion, double angle, Bgr color)
       {
@@ -304,29 +352,6 @@ namespace MotionDetection
                 _capture.Stop();
             }
         }     
-
-        private void FireKAM_Load(object sender, EventArgs e)
-        {
-            GeneratePanel();
-
-            metroComboBox2.Items.Insert(0, "160");
-            metroComboBox2.Items.Add("200");
-            metroComboBox2.Items.Add("240");
-            metroComboBox2.Items.Add("255");
-            metroComboBox2.SelectedIndex = 0;
-
-            metroComboBox1.Items.Insert(0, "Black");
-            metroComboBox1.Items.Add("Red");
-            metroComboBox1.Items.Add("Blue");
-            metroComboBox1.SelectedIndex = 0;
-
-            metroComboBox3.Items.Insert(0, "30");
-            metroComboBox3.Items.Add("120");
-            metroComboBox3.SelectedIndex = 0;
-
-            metroComboBox2.Enabled = false;
-            metroComboBox1.Enabled = false;
-        }
 
         private void paneli_Click(object sender, EventArgs e)
         {
@@ -432,85 +457,146 @@ namespace MotionDetection
             //DateTime max = new DateTime(2016, 12, 31);
             DateTime min = dateTimePicker1.Value.Date;
             DateTime max = dateTimePicker2.Value.Date;
+
+            if (ReportTypeCB.SelectedIndex == 4)
+            {
+                ChartTypeSwitch("pie");
+                for (int i = 0; i < 36; i++)
+                {
+                    List<BsonDocument> result = await DataAccess.FindByTimeAndArea(GetDateTimeString(min), GetDateTimeString(max.AddDays(1).AddMilliseconds(-1)), i+1);
+                    if (result != null)
+                    {
+                        chart1.Series[0].Points.AddXY(i, int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
+                    }
+                    else
+                    {
+                        chart1.Series[0].Points.AddXY(i, 0);
+                    }
+                }
+            }
             //yearly report
-            if (ReportTypeCB.SelectedIndex == 3)
-            {             
+            else if (ReportTypeCB.SelectedIndex == 3)
+            {
+                ChartTypeSwitch("column");
                 for (int i = 0; i < (max.Year - min.Year) + 1; i++)
                 {
                     DateTime firstDayOfYear = new DateTime(min.Year, 1, 1);
-                    string result = await DataAccess.FindByTime(GetDateTimeString(firstDayOfYear.AddYears(i)), GetDateTimeString(min.AddYears(i + 1).AddMilliseconds(-1)));
-                    if (result != "no result")
+                    List<BsonDocument> result = await DataAccess.FindByTime(GetDateTimeString(firstDayOfYear.AddYears(i)), GetDateTimeString(min.AddYears(i + 1).AddMilliseconds(-1)), ReportSourceDropdown.Text);
+                    if (result != null)
                     {
-                        chart1.Series[0].Points.AddXY(i + 1, int.Parse(result));
-                        chart1.Series[1].Points.AddXY(i + 1, int.Parse(result));
+                        chart1.Series[0].Points.AddXY(i + 1, int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
+                        chart1.Series[1].Points.AddXY(i + 1, int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
                     }
                     else
                     {
                         chart1.Series[0].Points.AddXY(i + 1, 0);
                         chart1.Series[1].Points.AddXY(i + 1, 0);
+
+                        chart1.Series[0].Points[i].Label = "#VAL";
                     }
                 }
             }
             //monthly report
             else if(ReportTypeCB.SelectedIndex == 2)
-            {              
-                for(int i = 0; i < 12; i++)
+            {
+                ChartTypeSwitch("column");
+                for (int i = 0; i < 12; i++)
                 {
                     //-1 millisecond to get the last second of the year
                     DateTime firstDayOfYear = new DateTime(min.Year, 1, 1);
-                    string result = await DataAccess.FindByTime(GetDateTimeString(firstDayOfYear.AddMonths(i)), GetDateTimeString(min.AddMonths(i+1).AddMilliseconds(-1)));
-                    if (result != "no result")
+                    List<BsonDocument> result = await DataAccess.FindByTime(GetDateTimeString(firstDayOfYear.AddMonths(i)), GetDateTimeString(min.AddMonths(i+1).AddMilliseconds(-1)), ReportSourceDropdown.Text);
+                    if (result != null)
                     {
-                        chart1.Series[0].Points.AddXY(i + 1, int.Parse(result));
-                        chart1.Series[1].Points.AddXY(i + 1, int.Parse(result));
+                        chart1.Series[0].Points.AddXY(i + 1, int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
+                        chart1.Series[1].Points.AddXY(i + 1, int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
                     }
                     else
                     {
                         chart1.Series[0].Points.AddXY(i + 1, 0);
                         chart1.Series[1].Points.AddXY(i + 1, 0);
+
+                        chart1.Series[0].Points[i].Label = "#VAL";
                     }
                 }               
             }
             //daily report
             else if (ReportTypeCB.SelectedIndex == 1)
             {
+                ChartTypeSwitch("column");
                 for (int i = 0; i < (max-min).TotalDays; i++)
                 {
-                    string result = await DataAccess.FindByTime(GetDateTimeString(min.AddDays(i)), GetDateTimeString(min.AddDays(i + 1)));
-                    if (result != "no result")
+                    List<BsonDocument> result = await DataAccess.FindByTime(GetDateTimeString(min.AddDays(i)), GetDateTimeString(min.AddDays(i + 1)), ReportSourceDropdown.Text);
+                    if (result != null)
                     {
-                        chart1.Series[0].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), int.Parse(result));
-                        chart1.Series[1].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), int.Parse(result));
+                        chart1.Series[0].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
+                        chart1.Series[1].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
                     }
                     else
                     {
                         chart1.Series[0].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), 0);
                         chart1.Series[1].Points.AddXY(min.AddDays(i).ToString("dd/mm/yyyy"), 0);
+
+                        chart1.Series[0].Points[i].Label = "#VAL";
                     }
                 } 
             }
             //hourly report
             else if (ReportTypeCB.SelectedIndex == 0)
             {
-                //db.record.find({ "Time":{$gt: "2016-03-08 00:00:00", $lt: "2016-03-08 01:00:00"} })
-                //db.record.insert({ "Camera":"Camera1","Time":"2016-03-08 09:12:12","MotionCout":1234})
+                ChartTypeSwitch("column");
                 for (int i = 0; i < 24; i++)
                 {
-                    string result = await DataAccess.FindByTime(GetDateTimeString(min.AddHours(i)), GetDateTimeString(min.AddHours(i + 1)));
-                    if (result != "no result")
+                    List<BsonDocument> result = await DataAccess.FindByTime(GetDateTimeString(min.AddHours(i)), GetDateTimeString(min.AddHours(i + 1)), ReportSourceDropdown.Text);
+                    if (result != null)
                     {
-                        chart1.Series[0].Points.AddXY(i, int.Parse(result));
-                        chart1.Series[1].Points.AddXY(i, int.Parse(result));
+                        chart1.Series[0].Points.AddXY(i, int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
+                        chart1.Series[1].Points.AddXY(i, int.Parse(result[0].GetElement("MotionCount").Value.ToString()));
                     }
                     else
                     {
                         chart1.Series[0].Points.AddXY(i, 0);
                         chart1.Series[1].Points.AddXY(i, 0);
+
+                        chart1.Series[0].Points[i].Label = "#VAL";
                     }
                 }
             }
         }
-              
+        
+        private void ChartTypeSwitch(string chartType)
+        {
+            if(chartType == "pie")
+            {
+                chart1.Series[0].ChartType = SeriesChartType.Pie;
+                chart1.Series[1].ChartType = SeriesChartType.Pie;
+                chart1.Series[0]["PieLabelStyle"] = "Outside";
+                chart1.Series[1]["PieLabelStyle"] = "Outside";
+                // Set these other two properties so that you can see the connecting lines
+                chart1.Series[0].BorderWidth = 1;
+                chart1.Series[0].BorderColor = System.Drawing.Color.FromArgb(26, 59, 105);
+
+                // Set the pie label as well as legend text to be displayed as percentage
+                // The P2 indicates a precision of 2 decimals
+                chart1.Series[0].Label = "#VALX (#PERCENT)";
+
+                chart1.ChartAreas[0].Area3DStyle.Enable3D = true;
+                chart1.ChartAreas[0].Area3DStyle.Inclination = 50;
+            }
+            else if(chartType == "column")
+            {
+                chart1.Series[0].ChartType = SeriesChartType.Column;
+                chart1.Series[1].ChartType = SeriesChartType.Line;
+                chart1.ChartAreas[0].Area3DStyle.Enable3D = false;
+                chart1.Series[0]["PieLabelStyle"] = "Inside";
+                chart1.Series[1]["PieLabelStyle"] = "Inside";
+                // Set the pie label as well as legend text to be displayed as percentage
+                // The P2 indicates a precision of 2 decimals
+                chart1.Series[0].Label = "#VAL (#PERCENT)";
+                chart1.Series[0].SmartLabelStyle.IsMarkerOverlappingAllowed = false;
+                chart1.Series[0].SmartLabelStyle.MovingDirection  = LabelAlignmentStyles.Right;
+            }
+        }
+
         //convert datetime to 0000-00-00 format
         private string GetDateTimeString(DateTime date)
         {
@@ -545,6 +631,14 @@ namespace MotionDetection
                 label8.Visible = true;
                 dateTimePicker2.Visible = true;
                 dateTimePicker1.CustomFormat = "yyyy";
+                dateTimePicker2.CustomFormat = "yyyy";
+            }
+            else if (ReportTypeCB.SelectedIndex == 4)
+            {
+                label8.Visible = true;
+                dateTimePicker2.Visible = true;
+                dateTimePicker1.CustomFormat = "dd-MM-yyyy";
+                dateTimePicker2.CustomFormat = "dd-MM-yyyy";
             }
         }
 
@@ -572,9 +666,23 @@ namespace MotionDetection
 
         private void SourceComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(SourceComboBox.SelectedIndex == 0)
+            if (SourceComboBox.SelectedIndex == 0)
             {
-
+                videoSource = "Camera";
+                if (recordToggle.Checked == true)
+                {
+                    _capture.Dispose();
+                    _capture = null;
+                    StartCapture();
+                }
+                else
+                {
+                    if (_capture != null)
+                    {
+                        _capture.Dispose();
+                        _capture = null;
+                    }
+                }
             }
             else if (SourceComboBox.SelectedIndex == 1)
             {
@@ -586,8 +694,38 @@ namespace MotionDetection
 
                 if (choofdlog.ShowDialog() == DialogResult.OK)
                 {
-                    videoSource = choofdlog.FileName;        
+                    videoSource = choofdlog.FileName;
+                    if (recordToggle.Checked == true)
+                    {                       
+                        _capture.Dispose();
+                        _capture = null;
+                        StartCapture();
+                    }
+                    else
+                    {
+                        if (_capture != null)
+                        {
+                            _capture.Dispose();
+                            _capture = null;
+                        }
+                    }
                 }
+                else
+                {
+                    SourceComboBox.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private async void SourceDropdown_DropDown(object sender, EventArgs e)
+        {
+            ReportSourceDropdown.Items.Clear();
+            ReportSourceDropdown.Items.Add("All");
+            ReportSourceDropdown.SelectedIndex = 0;
+            var distincts = await DataAccess.FindSourceDistinct();
+            foreach(string distinct in distincts)
+            {
+                ReportSourceDropdown.Items.Add(distinct);
             }
         }
     }
