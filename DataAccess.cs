@@ -8,6 +8,8 @@ using MongoDB.Driver;
 
 namespace MotionDetection
 {
+    //db.record.find({ "Time":{$gt: "2016-03-08 00:00:00", $lt: "2016-03-08 01:00:00"} })
+    //db.record.insert({ "Camera":"Camera1","Time":"2016-03-08 09:12:12","MotionCout":1234})
     class DataAccess
     {
         protected static IMongoClient client;
@@ -25,12 +27,6 @@ namespace MotionDetection
             client = new MongoClient();
             database = client.GetDatabase("firekam");
             var collection = database.GetCollection<BsonDocument>("record");
-            //    var document = new BsonDocument
-            //    {
-            //        {"Camera", "Camera1"},
-            //        {"Time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") },
-            //        {"MotionCout", motionCount }
-            //    };
             await collection.InsertOneAsync(document);
 
             return result;
@@ -49,28 +45,60 @@ namespace MotionDetection
         }
 
         //find by time
-        static public async Task<string> FindByTime(string minTime, string maxTime)
+        static public async Task<List<BsonDocument>> FindByTime(string minTime, string maxTime, string source)
         {
             client = new MongoClient();
             database = client.GetDatabase("firekam");
             var collection = database.GetCollection<BsonDocument>("record");
-
-            var filter = Builders<BsonDocument>.Filter.Gt("Time", minTime) & Builders<BsonDocument>.Filter.Lt("Time", maxTime);
+            FilterDefinition<BsonDocument> filter;
+            if (source == "All")
+            {
+               filter = Builders<BsonDocument>.Filter.Gt("Time", minTime) & Builders<BsonDocument>.Filter.Lt("Time", maxTime);
+            }
+            else
+            {
+                filter = Builders<BsonDocument>.Filter.Gt("Time", minTime) & Builders<BsonDocument>.Filter.Lt("Time", maxTime) & Builders<BsonDocument>.Filter.Lt("Source", source);
+            }
             //var resultFirst = await collection.Find(filter).ToListAsync();
             var aggregate = collection.Aggregate().Match(filter).Group(new BsonDocument { {"_id", 0 }, { "MotionCount", new BsonDocument("$sum", "$MotionCout") } });
             var results = await aggregate.ToListAsync();
             if(results.Count == 0)
             {
-                return "no result";
+                results = null;
+                return results;
             }
-            return results[0].GetElement("MotionCount").Value.ToString();
+            return results;
         }
 
-        //test
-        static public async void test ()
+        //find by time and areacode
+        static public async Task<List<BsonDocument>> FindByTimeAndArea(string minTime, string maxTime, int area)
         {
-            string a = await FindByCamera("camera1");
+            client = new MongoClient();
+            database = client.GetDatabase("firekam");
+            var collection = database.GetCollection<BsonDocument>("record");
+
+            var filter = Builders<BsonDocument>.Filter.Gt("Time", minTime) & Builders<BsonDocument>.Filter.Lt("Time", maxTime) & Builders<BsonDocument>.Filter.Eq("Area", area.ToString());
+            var resultFirst = await collection.Find(filter).ToListAsync();
+            var aggregate = collection.Aggregate().Match(filter).Group(new BsonDocument { { "_id", 0 }, { "MotionCount", new BsonDocument("$sum", "$MotionCout") } });
+            var results = await aggregate.ToListAsync();
+            if (results.Count == 0)
+            {
+                results = null;
+                return results;
+            }
+            //return results[0].GetElement("MotionCount").Value.ToString();
+            return results;
         }
 
+        static public async Task<List<string>> FindSourceDistinct()
+        {
+
+            client = new MongoClient();
+            database = client.GetDatabase("firekam");
+            var collection = database.GetCollection<BsonDocument>("record");
+            var filter = new BsonDocument();
+            var distinctValue =  await collection.DistinctAsync<string>("Source", filter);
+            return distinctValue.ToList();
+        }
     }
 }

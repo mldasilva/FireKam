@@ -16,10 +16,10 @@ namespace MotionDetection
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FireKAM));
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.msmMain = new MetroFramework.Components.MetroStyleManager(this.components);
@@ -29,15 +29,8 @@ namespace MotionDetection
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.ReportTypeCB = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.MotionCountMaxTb = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.MotionCountMinTb = new System.Windows.Forms.TextBox();
-            this.CareraTb = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.GenerateChartBtn = new MetroFramework.Controls.MetroButton();
             this.ToPDF = new MetroFramework.Controls.MetroButton();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -69,6 +62,11 @@ namespace MotionDetection
             this.HeatMap = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.AreacodeCB = new System.Windows.Forms.ComboBox();
+            this.ReportSourceDropdown = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.msmMain)).BeginInit();
             this.Page3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -92,20 +90,17 @@ namespace MotionDetection
             // 
             // Page3
             // 
+            this.Page3.Controls.Add(this.ReportSourceDropdown);
+            this.Page3.Controls.Add(this.label6);
+            this.Page3.Controls.Add(this.AreacodeCB);
+            this.Page3.Controls.Add(this.label2);
             this.Page3.Controls.Add(this.label8);
             this.Page3.Controls.Add(this.dateTimePicker2);
             this.Page3.Controls.Add(this.dateTimePicker1);
             this.Page3.Controls.Add(this.ReportTypeCB);
             this.Page3.Controls.Add(this.label11);
-            this.Page3.Controls.Add(this.label10);
-            this.Page3.Controls.Add(this.MotionCountMaxTb);
-            this.Page3.Controls.Add(this.label9);
             this.Page3.Controls.Add(this.label7);
-            this.Page3.Controls.Add(this.MotionCountMinTb);
-            this.Page3.Controls.Add(this.CareraTb);
-            this.Page3.Controls.Add(this.label6);
             this.Page3.Controls.Add(this.label5);
-            this.Page3.Controls.Add(this.label2);
             this.Page3.Controls.Add(this.GenerateChartBtn);
             this.Page3.Controls.Add(this.ToPDF);
             this.Page3.Controls.Add(this.chart1);
@@ -114,7 +109,7 @@ namespace MotionDetection
             this.Page3.Location = new System.Drawing.Point(8, 42);
             this.Page3.Margin = new System.Windows.Forms.Padding(6);
             this.Page3.Name = "Page3";
-            this.Page3.Size = new System.Drawing.Size(184, 50);
+            this.Page3.Size = new System.Drawing.Size(894, 550);
             this.Page3.TabIndex = 2;
             this.Page3.Text = "Graphs";
             this.Page3.VerticalScrollbarBarColor = true;
@@ -123,8 +118,9 @@ namespace MotionDetection
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.White;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(289, 186);
+            this.label8.Location = new System.Drawing.Point(244, 161);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(51, 26);
             this.label8.TabIndex = 27;
@@ -135,7 +131,7 @@ namespace MotionDetection
             this.dateTimePicker2.CustomFormat = "MM/yyyy";
             this.dateTimePicker2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker2.Location = new System.Drawing.Point(264, 214);
+            this.dateTimePicker2.Location = new System.Drawing.Point(219, 189);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.ShowUpDown = true;
             this.dateTimePicker2.Size = new System.Drawing.Size(118, 32);
@@ -146,7 +142,7 @@ namespace MotionDetection
             this.dateTimePicker1.CustomFormat = "MM/yyyy";
             this.dateTimePicker1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(106, 214);
+            this.dateTimePicker1.Location = new System.Drawing.Point(61, 189);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.ShowUpDown = true;
             this.dateTimePicker1.Size = new System.Drawing.Size(118, 32);
@@ -161,8 +157,9 @@ namespace MotionDetection
             "Hourly Report",
             "Daily Reprot",
             "Monthly Report",
-            "Yearly Reropt"});
-            this.ReportTypeCB.Location = new System.Drawing.Point(160, 132);
+            "Yearly Report",
+            "Area Report"});
+            this.ReportTypeCB.Location = new System.Drawing.Point(139, 86);
             this.ReportTypeCB.Name = "ReportTypeCB";
             this.ReportTypeCB.Size = new System.Drawing.Size(160, 33);
             this.ReportTypeCB.TabIndex = 33;
@@ -171,149 +168,91 @@ namespace MotionDetection
             // label11
             // 
             this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.Color.White;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(3, 135);
+            this.label11.Location = new System.Drawing.Point(3, 89);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(130, 26);
             this.label11.TabIndex = 32;
             this.label11.Text = "Report Type";
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(234, 262);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(53, 26);
-            this.label10.TabIndex = 30;
-            this.label10.Text = "Max";
-            // 
-            // MotionCountMaxTb
-            // 
-            this.MotionCountMaxTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MotionCountMaxTb.Location = new System.Drawing.Point(251, 291);
-            this.MotionCountMaxTb.Name = "MotionCountMaxTb";
-            this.MotionCountMaxTb.Size = new System.Drawing.Size(18, 32);
-            this.MotionCountMaxTb.TabIndex = 29;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(152, 261);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(47, 26);
-            this.label9.TabIndex = 28;
-            this.label9.Text = "Min";
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(121, 186);
+            this.label7.BackColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(76, 161);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(57, 25);
             this.label7.TabIndex = 25;
             this.label7.Text = "Start";
             // 
-            // MotionCountMinTb
-            // 
-            this.MotionCountMinTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MotionCountMinTb.Location = new System.Drawing.Point(166, 289);
-            this.MotionCountMinTb.Name = "MotionCountMinTb";
-            this.MotionCountMinTb.Size = new System.Drawing.Size(18, 32);
-            this.MotionCountMinTb.TabIndex = 23;
-            // 
-            // CareraTb
-            // 
-            this.CareraTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CareraTb.Location = new System.Drawing.Point(160, 83);
-            this.CareraTb.Name = "CareraTb";
-            this.CareraTb.Size = new System.Drawing.Size(18, 32);
-            this.CareraTb.TabIndex = 22;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(-5, 291);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(141, 26);
-            this.label6.TabIndex = 21;
-            this.label6.Text = "Motion Count";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.White;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(4, 213);
+            this.label5.Location = new System.Drawing.Point(4, 188);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(60, 26);
             this.label5.TabIndex = 20;
             this.label5.Text = "Time";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 86);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 26);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "Camera";
-            // 
             // GenerateChartBtn
             // 
-            this.GenerateChartBtn.Location = new System.Drawing.Point(111, 397);
+            this.GenerateChartBtn.Location = new System.Drawing.Point(61, 386);
             this.GenerateChartBtn.Margin = new System.Windows.Forms.Padding(6);
             this.GenerateChartBtn.Name = "GenerateChartBtn";
-            this.GenerateChartBtn.Size = new System.Drawing.Size(88, 28);
+            this.GenerateChartBtn.Size = new System.Drawing.Size(91, 39);
             this.GenerateChartBtn.TabIndex = 18;
             this.GenerateChartBtn.Text = "Generate";
             this.GenerateChartBtn.Click += new System.EventHandler(this.GenerateChartBtn_Click);
             // 
             // ToPDF
             // 
-            this.ToPDF.Location = new System.Drawing.Point(1610, 914);
+            this.ToPDF.Location = new System.Drawing.Point(207, 386);
             this.ToPDF.Margin = new System.Windows.Forms.Padding(6);
             this.ToPDF.Name = "ToPDF";
-            this.ToPDF.Size = new System.Drawing.Size(170, 62);
+            this.ToPDF.Size = new System.Drawing.Size(92, 39);
             this.ToPDF.TabIndex = 16;
             this.ToPDF.Text = "Save as PDF";
             this.ToPDF.Click += new System.EventHandler(this.ToPDF_Click);
             // 
             // chart1
             // 
-            chartArea3.AxisX.Interval = 1D;
-            chartArea3.AxisX.MajorGrid.LineWidth = 0;
-            chartArea3.AxisX.Minimum = 0D;
-            chartArea3.AxisX.ScrollBar.BackColor = System.Drawing.Color.White;
-            chartArea3.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.White;
-            chartArea3.AxisX.ScrollBar.LineColor = System.Drawing.Color.White;
-            chartArea3.AxisY.MajorGrid.LineWidth = 0;
-            chartArea3.CursorX.Interval = 0.01D;
-            chartArea3.CursorX.IsUserEnabled = true;
-            chartArea3.CursorX.IsUserSelectionEnabled = true;
-            chartArea3.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.chart1.Legends.Add(legend3);
-            this.chart1.Location = new System.Drawing.Point(391, 63);
+            chartArea2.AxisX.Interval = 1D;
+            chartArea2.AxisX.MajorGrid.LineWidth = 0;
+            chartArea2.AxisX.Minimum = 0D;
+            chartArea2.AxisX.ScrollBar.BackColor = System.Drawing.Color.White;
+            chartArea2.AxisX.ScrollBar.ButtonColor = System.Drawing.Color.White;
+            chartArea2.AxisX.ScrollBar.LineColor = System.Drawing.Color.White;
+            chartArea2.AxisY.MajorGrid.LineWidth = 0;
+            chartArea2.CursorX.Interval = 0.01D;
+            chartArea2.CursorX.IsUserEnabled = true;
+            chartArea2.CursorX.IsUserSelectionEnabled = true;
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
+            this.chart1.Location = new System.Drawing.Point(320, 0);
             this.chart1.Margin = new System.Windows.Forms.Padding(6);
             this.chart1.Name = "chart1";
-            series5.ChartArea = "ChartArea1";
-            series5.IsValueShownAsLabel = true;
-            series5.IsVisibleInLegend = false;
-            series5.Legend = "Legend1";
-            series5.Name = "Camera";
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Color = System.Drawing.Color.Red;
-            series6.IsVisibleInLegend = false;
-            series6.Legend = "Legend1";
-            series6.Name = "Series2";
-            this.chart1.Series.Add(series5);
-            this.chart1.Series.Add(series6);
-            this.chart1.Size = new System.Drawing.Size(531, 420);
+            series3.ChartArea = "ChartArea1";
+            series3.IsValueShownAsLabel = true;
+            series3.IsVisibleInLegend = false;
+            series3.Legend = "Legend1";
+            series3.Name = "Camera";
+            series3.SmartLabelStyle.AllowOutsidePlotArea = System.Windows.Forms.DataVisualization.Charting.LabelOutsidePlotAreaStyle.Yes;
+            series3.SmartLabelStyle.IsOverlappedHidden = false;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.Red;
+            series4.IsVisibleInLegend = false;
+            series4.Legend = "Legend1";
+            series4.Name = "Series2";
+            series4.SmartLabelStyle.IsOverlappedHidden = false;
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
+            this.chart1.Size = new System.Drawing.Size(568, 538);
             this.chart1.TabIndex = 11;
             this.chart1.Text = "chart1";
             // 
@@ -326,7 +265,7 @@ namespace MotionDetection
             this.Page2.Location = new System.Drawing.Point(8, 42);
             this.Page2.Margin = new System.Windows.Forms.Padding(6);
             this.Page2.Name = "Page2";
-            this.Page2.Size = new System.Drawing.Size(184, 50);
+            this.Page2.Size = new System.Drawing.Size(894, 550);
             this.Page2.TabIndex = 1;
             this.Page2.Text = "Motion View";
             this.Page2.VerticalScrollbarBarColor = true;
@@ -337,7 +276,7 @@ namespace MotionDetection
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.White;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(346, 10);
+            this.label1.Location = new System.Drawing.Point(326, 10);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(218, 31);
@@ -397,7 +336,7 @@ namespace MotionDetection
             this.Page1.Location = new System.Drawing.Point(8, 42);
             this.Page1.Margin = new System.Windows.Forms.Padding(6);
             this.Page1.Name = "Page1";
-            this.Page1.Size = new System.Drawing.Size(884, 550);
+            this.Page1.Size = new System.Drawing.Size(894, 550);
             this.Page1.TabIndex = 0;
             this.Page1.Text = "Pedestrian View";
             this.Page1.VerticalScrollbarBarColor = true;
@@ -573,7 +512,7 @@ namespace MotionDetection
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(58, 664);
+            this.label3.Location = new System.Drawing.Point(53, 664);
             this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(70, 25);
@@ -589,7 +528,7 @@ namespace MotionDetection
             this.Home.Location = new System.Drawing.Point(8, 42);
             this.Home.Margin = new System.Windows.Forms.Padding(6);
             this.Home.Name = "Home";
-            this.Home.Size = new System.Drawing.Size(184, 50);
+            this.Home.Size = new System.Drawing.Size(894, 550);
             this.Home.TabIndex = 3;
             this.Home.Text = "Home";
             this.Home.VerticalScrollbarBarColor = true;
@@ -613,7 +552,7 @@ namespace MotionDetection
             this.pictureBox2.Location = new System.Drawing.Point(0, 0);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(6);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(184, 50);
+            this.pictureBox2.Size = new System.Drawing.Size(894, 550);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 5;
             this.pictureBox2.TabStop = false;
@@ -621,15 +560,16 @@ namespace MotionDetection
             // HeatMap
             // 
             this.HeatMap.Controls.Add(this.Home);
-            this.HeatMap.Controls.Add(this.Page1);
             this.HeatMap.Controls.Add(this.Page2);
+            this.HeatMap.Controls.Add(this.Page1);
             this.HeatMap.Controls.Add(this.Page3);
+            this.HeatMap.Controls.Add(this.metroTabPage2);
             this.HeatMap.Controls.Add(this.metroTabPage1);
-            this.HeatMap.Location = new System.Drawing.Point(47, 51);
+            this.HeatMap.Location = new System.Drawing.Point(50, 58);
             this.HeatMap.Margin = new System.Windows.Forms.Padding(6);
             this.HeatMap.Name = "HeatMap";
-            this.HeatMap.SelectedIndex = 2;
-            this.HeatMap.Size = new System.Drawing.Size(900, 600);
+            this.HeatMap.SelectedIndex = 3;
+            this.HeatMap.Size = new System.Drawing.Size(910, 600);
             this.HeatMap.TabIndex = 11;
             // 
             // metroTabPage1
@@ -637,7 +577,7 @@ namespace MotionDetection
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.Location = new System.Drawing.Point(8, 42);
             this.metroTabPage1.Name = "metroTabPage1";
-            this.metroTabPage1.Size = new System.Drawing.Size(184, 50);
+            this.metroTabPage1.Size = new System.Drawing.Size(894, 550);
             this.metroTabPage1.TabIndex = 4;
             this.metroTabPage1.Text = "HeatMap";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
@@ -647,12 +587,102 @@ namespace MotionDetection
             this.timer.Interval = 5000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
+            // metroTabPage2
+            // 
+            this.metroTabPage2.HorizontalScrollbarBarColor = true;
+            this.metroTabPage2.Location = new System.Drawing.Point(8, 42);
+            this.metroTabPage2.Name = "metroTabPage2";
+            this.metroTabPage2.Size = new System.Drawing.Size(894, 550);
+            this.metroTabPage2.TabIndex = 5;
+            this.metroTabPage2.Text = "Setting";
+            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.White;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 284);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(58, 26);
+            this.label2.TabIndex = 36;
+            this.label2.Text = "Area";
+            // 
+            // AreacodeCB
+            // 
+            this.AreacodeCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.AreacodeCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AreacodeCB.FormattingEnabled = true;
+            this.AreacodeCB.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "34",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+            "31",
+            "32",
+            "33",
+            "34",
+            "35",
+            "36"});
+            this.AreacodeCB.Location = new System.Drawing.Point(61, 281);
+            this.AreacodeCB.Name = "AreacodeCB";
+            this.AreacodeCB.Size = new System.Drawing.Size(160, 33);
+            this.AreacodeCB.TabIndex = 37;
+            // 
+            // ReportSourceDropdown
+            // 
+            this.ReportSourceDropdown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ReportSourceDropdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReportSourceDropdown.FormattingEnabled = true;
+            this.ReportSourceDropdown.Items.AddRange(new object[] {
+            "All"});
+            this.ReportSourceDropdown.Location = new System.Drawing.Point(91, 39);
+            this.ReportSourceDropdown.Name = "ReportSourceDropdown";
+            this.ReportSourceDropdown.Size = new System.Drawing.Size(160, 33);
+            this.ReportSourceDropdown.TabIndex = 39;
+            this.ReportSourceDropdown.DropDown += new System.EventHandler(this.SourceDropdown_DropDown);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.White;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(4, 42);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(81, 26);
+            this.label6.TabIndex = 38;
+            this.label6.Text = "Source";
+            // 
             // FireKAM
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScrollMargin = new System.Drawing.Size(10, 10);
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(996, 700);
+            this.ClientSize = new System.Drawing.Size(1000, 700);
             this.Controls.Add(this.HeatMap);
             this.Controls.Add(this.label3);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -704,16 +734,9 @@ namespace MotionDetection
         private MetroFramework.Controls.MetroTabControl HeatMap;
         private System.Windows.Forms.PictureBox pictureBox2;
         private MetroFramework.Controls.MetroButton GenerateChartBtn;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox MotionCountMinTb;
-        private System.Windows.Forms.TextBox CareraTb;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox MotionCountMaxTb;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox ReportTypeCB;
@@ -735,6 +758,11 @@ namespace MotionDetection
         private MetroFramework.Controls.MetroLabel metroLabel1;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         private MetroFramework.Controls.MetroComboBox SourceComboBox;
+        private MetroFramework.Controls.MetroTabPage metroTabPage2;
+        private System.Windows.Forms.ComboBox AreacodeCB;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox ReportSourceDropdown;
+        private System.Windows.Forms.Label label6;
     }
 }
 
